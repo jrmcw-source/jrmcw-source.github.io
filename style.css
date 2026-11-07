@@ -31,3 +31,9 @@ footer { max-width:880px; margin:0 auto; padding:0 22px 34px; color:var(--mut); 
 .big { font-size:1.08rem; }
 .pron { font-size:1.05rem; }
 @media (prefers-reduced-motion: reduce) { header.site canvas#binary { display:none; } }
+
+.track { border-top:1px solid var(--line); padding:12px 0 14px; }
+.track .t { font-weight:600; }
+.track .c { color:var(--mut); }
+.track .d { color:var(--mut); font-variant-numeric:tabular-nums; }
+.track audio { width:100%; margin-top:6px; }
