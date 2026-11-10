@@ -48,3 +48,5 @@ footer { max-width:880px; margin:0 auto; padding:0 22px 34px; color:var(--mut); 
 .totop:hover { background:var(--acc); color:#fff; }
 
 /* Top button at the foot of every page — added 2026-11-10. */
+
+/* Deploy retry 2026-11-10 — Pages sync timed out twice on the 274 MB package; no style change. */
