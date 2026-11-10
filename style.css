@@ -46,3 +46,5 @@ footer { max-width:880px; margin:0 auto; padding:0 22px 34px; color:var(--mut); 
 .topwrap { text-align:center; margin:14px 0 0; }
 .totop { display:inline-block; padding:8px 26px; border:1px solid var(--acc); border-radius:999px; color:var(--acc); background:#fff; font-weight:600; text-decoration:none; }
 .totop:hover { background:var(--acc); color:#fff; }
+
+/* Top button at the foot of every page — added 2026-11-10. */
