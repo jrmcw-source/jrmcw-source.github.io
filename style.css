@@ -37,3 +37,7 @@ footer { max-width:880px; margin:0 auto; padding:0 22px 34px; color:var(--mut); 
 .track .c { color:var(--mut); }
 .track .d { color:var(--mut); font-variant-numeric:tabular-nums; }
 .track audio { width:100%; margin-top:6px; }
+
+.hsearch { position:relative; z-index:2; max-width:880px; margin:-12px auto 8px; padding:0 22px; text-align:right; }
+.hsearch input { font-size:14px; padding:4px 8px; width:160px; border:1px solid #888; border-radius:4px; }
+.hsearch button { font-size:14px; padding:4px 10px; margin-left:4px; border:1px solid #888; border-radius:4px; background:#f4f4f4; cursor:pointer; }
