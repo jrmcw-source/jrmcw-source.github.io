@@ -68,3 +68,5 @@ footer { max-width:880px; margin:0 auto; padding:0 22px 34px; color:var(--mut); 
 .gb-ownerline { margin-top: 16px; }
 .gb-minibtn, .gb-tools button, #gb-ownertools button { font: inherit; font-size: .88rem; padding: 4px 12px; margin-right: 8px; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: var(--mut); cursor: pointer; }
 .gb-tools { margin: 8px 0 0; }
+
+.gb-keyin { font: inherit; font-size: .92rem; padding: 4px 10px; margin-right: 8px; border: 1px solid var(--line); border-radius: 999px; }
