@@ -25,8 +25,20 @@
 
 <div class="card">
 <p class="tag">The Guestbook</p>
-<script src="https://cdn.commoninja.com/sdk/latest/commonninja.js" defer></script>
-<div class="commonninja_component pid-f1a1c6d6-d62e-4c15-a7b5-51cf8f7ec726"></div>
+<div id="gb">
+<form id="gb-form" class="gb-form">
+<p><label>Your name<br><input type="text" name="name" maxlength="40" required></label></p>
+<p><label>Email <span class="gb-opt">(optional — only if you want a reply or a contest entry; never shown on the board)</span><br><input type="email" name="email" maxlength="120"></label></p>
+<p><label>Badge claim code <span class="gb-opt">(optional — if you won the jAIou badge on McWoogle, put your code here and the badge rides with your post)</span><br><input type="text" name="code" maxlength="20"></label></p>
+<p><label>Say it<br><textarea name="message" rows="4" maxlength="1000" required></textarea></label></p>
+<p class="gb-trap" aria-hidden="true"><label>Website<br><input type="text" name="website" tabindex="-1" autocomplete="off"></label></p>
+<p><button type="submit" class="gb-submit">Post it</button></p>
+</form>
+<p id="gb-note" class="gb-note" role="status"></p>
+<div id="gb-posts" class="gb-posts"><p class="gb-empty">Loading the board…</p></div>
+<p class="gb-ownerline"><button type="button" id="gb-owner" class="gb-minibtn">Owner</button> <span id="gb-ownertools"></span></p>
+</div>
+<script src="guestbook.js" defer></script>
 </div>
 </main>
 <footer><p>jason@jaiou.com · Lafayette, Louisiana · <a href="index.html">jaiou.com</a></p><p class="topwrap"><a class="totop" href="#top">↑ Top</a></p></footer>
