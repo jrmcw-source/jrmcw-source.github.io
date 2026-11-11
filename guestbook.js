@@ -17,7 +17,7 @@
   var BADGE_DISPLAY = {
     mcwoogle: ["images/jaiou-badge.svg", "jAIou badge — won on McWoogle, four searches deep", "McWoogle badge"],
     fishing: ["images/badge-fishing.svg", "Fishing badge — landed Old Whiskers", "Fishing badge"],
-    othello: ["images/badge-othello.svg", "Othello badge — beat the computer", "Othello badge"],
+    othello: ["images/badge-othello.svg", "Reversi badge — leader of the board", "Reversi badge"],
     music: ["images/badge-music.svg", "Music badge — granted by Jason", "Music badge — granted by Jason"]
   };
 
