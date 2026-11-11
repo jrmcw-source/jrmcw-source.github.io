@@ -24,7 +24,8 @@
     { name: "Rio Grande cichlid", min: 0.3, max: 1.6, share: 6, line: "The only cichlid native to the country, right here in the Blanco." },
     { name: "Flathead catfish", min: 5.0, max: 38.0, share: 5, line: "A serious fish. Not the legend, but serious." },
     { name: "Gar", min: 2.0, max: 42.0, share: 3, line: "Long as a telephone pole. Well — a big gar." },
-    { name: "The old boot", min: null, max: null, share: 4, line: "Not a fish. The river gives back what it gets." },
+    { name: "The old boot", min: null, max: null, share: 3, line: "Not a fish. The river gives back what it gets." },
+    { name: "Dad's old rowboat", min: null, max: null, share: 1, line: "Still down there. Some things the river keeps." },
     { name: "Old Whiskers", min: 55.0, max: 72.0, share: 2, line: "Every story was true." },
   ];
 
@@ -165,6 +166,7 @@
     if (weight && (!s.best || weight > s.best.weight)) s.best = { name: f.name, weight: weight };
     save(s);
     paintStringer();
+    if (weight) submitCatch(f.name, weight);
     result.hidden = false;
     result.textContent = "";
     var head = document.createElement("p");
@@ -180,6 +182,74 @@
     reset(400);
   }
 
+  // The leaderboard: everybody fishes in their own browser, all at once if
+  // they like — the board is shared, and it keeps the bragging.
+  var nameInput = document.getElementById("angler-name");
+  var boardBox = document.getElementById("fish-board");
+  var bassLine = document.getElementById("fish-bass");
+
+  if (nameInput) {
+    nameInput.value = store().name || "";
+    nameInput.addEventListener("change", function () {
+      var s = store();
+      s.name = nameInput.value.trim().slice(0, 40);
+      save(s);
+    });
+  }
+
+  function submitCatch(species, weight) {
+    var s = store();
+    if (!s.name) return;
+    fetch(API + "/catch", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: s.name, species: species, weight: Math.round(weight * 10) / 10 }),
+    }).then(function () { loadBoard(); }).catch(function () { /* your stringer still keeps the fish */ });
+  }
+
+  function fmtDate(iso) {
+    var d = new Date(String(iso).replace(" ", "T") + "Z");
+    return d.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "America/Chicago" });
+  }
+
+  function renderBoard(data) {
+    if (!boardBox) return;
+    var top = data.top || [];
+    boardBox.textContent = "";
+    if (!top.length) {
+      var p = document.createElement("p");
+      p.className = "gb-empty";
+      p.textContent = "No fish on the board yet. Yours could be the first.";
+      boardBox.appendChild(p);
+    } else {
+      top.forEach(function (c, i) {
+        var row = document.createElement("div");
+        row.className = "lb-row";
+        var left = document.createElement("span");
+        left.textContent = (i + 1) + ". " + c.species;
+        var right = document.createElement("span");
+        right.className = "lb-right";
+        right.textContent = Number(c.weight).toFixed(1) + " lb — " + c.name + " · " + fmtDate(c.created_at);
+        row.appendChild(left);
+        row.appendChild(right);
+        boardBox.appendChild(row);
+      });
+    }
+    if (bassLine) {
+      bassLine.textContent = data.bass
+        ? Number(data.bass.weight).toFixed(1) + " lb " + data.bass.species.toLowerCase() + " — " + data.bass.name
+        : "no bass yet";
+    }
+  }
+
+  function loadBoard() {
+    if (!boardBox) return;
+    fetch(API + "/board")
+      .then(function (r) { return r.json(); })
+      .then(renderBoard)
+      .catch(function () { /* the fishing still works without the board */ });
+  }
+
   btn.addEventListener("click", strike);
   document.getElementById("fish-scene").addEventListener("click", function () {
     if (state !== "idle") strike();
@@ -189,4 +259,5 @@
   });
 
   paintStringer();
+  loadBoard();
 })();
