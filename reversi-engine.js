@@ -117,7 +117,7 @@
     return w;
   })();
 
-  function evaluate(board, player, myMoveCount) {
+  function evaluate(board, player, myMoveCount, greed) {
     var opp = other(player);
     var my = 0, op = 0, i, counts = countDiscs(board);
     if (player === BLACK) { my = counts.black; op = counts.white; }
@@ -125,17 +125,20 @@
     if (op === 0) return 100000;
     if (my === 0) return -100000;
     var score = 0;
-    // Corners are forever.
+    // Corners are forever. (An amateur knows a corner is good; he just
+    // doesn't yet know how good, so his scale runs smaller.)
+    var cornerWorth = greed ? 500 : 1200;
     for (i = 0; i < 4; i++) {
       var corner = CORNERS[i];
-      if (board[corner] === player) score += 1200;
-      else if (board[corner] === opp) score -= 1200;
+      if (board[corner] === player) score += cornerWorth;
+      else if (board[corner] === opp) score -= cornerWorth;
       else {
         // Squares next to an open corner are offers. Don't make them.
+        // (An amateur barely fears them — the greed flag softens this.)
         var ns = CORNER_NEIGHBORS[corner];
         for (var j = 0; j < 3; j++) {
           var n = ns[j], diag = (n === 9 || n === 14 || n === 49 || n === 54);
-          var wgt = diag ? 320 : 220;
+          var wgt = (diag ? 320 : 220) * (greed ? 0.25 : 1);
           if (board[n] === player) score -= wgt;
           else if (board[n] === opp) score += wgt;
         }
@@ -145,12 +148,14 @@
     // side-to-move's count; only the opponent's needs computing here.
     var myMoves = typeof myMoveCount === "number" ? myMoveCount : legalMoves(board, player).size;
     var opMoves = legalMoves(board, opp).size;
-    if (myMoves + opMoves > 0) score += 14 * (myMoves - opMoves);
-    if (opMoves === 0) score += 250;
-    if (myMoves === 0) score -= 250;
-    // Discs barely matter until the end is in sight.
+    if (myMoves + opMoves > 0) score += (greed ? 6 : 14) * (myMoves - opMoves);
+    if (opMoves === 0) score += greed ? 80 : 250;
+    if (myMoves === 0) score -= greed ? 80 : 250;
+    // Discs barely matter until the end is in sight — unless you're an
+    // amateur, in which case discs are the whole point of the exercise.
     var empties = counts.empty;
-    if (empties > 16) score += 1 * (my - op);
+    if (greed) score += 10 * (my - op);
+    else if (empties > 16) score += 1 * (my - op);
     else score += 8 * (my - op);
     return score;
   }
@@ -170,7 +175,7 @@
       }
       return -search(board, other(player), depth - 1, -beta, -alpha, empties, solveAt, state);
     }
-    if (depth <= 0 && empties > solveAt) return evaluate(board, player, moves.size);
+    if (depth <= 0 && empties > solveAt) return evaluate(board, player, moves.size, state.greed);
     var entries = Array.from(moves.entries());
     entries.sort(function (a, b) { return SQUARE_ORDER[b[0]] - SQUARE_ORDER[a[0]]; });
     var best = -Infinity;
@@ -188,9 +193,9 @@
   }
 
   var LEVELS = {
-    amateur: { budget: 3000, maxDepth: 4, solveAt: 8, looseness: 0.25 },
-    player: { budget: 40000, maxDepth: 8, solveAt: 11, looseness: 0 },
-    sensei: { budget: 200000, maxDepth: 64, solveAt: 14, looseness: 0 }
+    amateur: { budget: 800, maxDepth: 1, solveAt: 6, looseness: 0.3, greed: true },
+    player: { budget: 40000, maxDepth: 8, solveAt: 11, looseness: 0, greed: false },
+    sensei: { budget: 200000, maxDepth: 64, solveAt: 14, looseness: 0, greed: false }
   };
 
   // Pick the computer's move: deepen the search round by round and keep
@@ -203,9 +208,10 @@
     if (moves.size === 0) return null;
     if (moves.size === 1) return moves.keys().next().value;
     var empties = countDiscs(board).empty;
-    var state = { nodes: 0, budget: cfg.budget, aborted: false };
+    var state = { nodes: 0, budget: cfg.budget, aborted: false, greed: cfg.greed };
     var bestScored = null;
-    for (var depth = 2; depth <= cfg.maxDepth; depth += 2) {
+    var startDepth = cfg.maxDepth < 2 ? 1 : 2;
+    for (var depth = startDepth; depth <= cfg.maxDepth; depth += 2) {
       var scored = [];
       var entries = Array.from(moves.entries());
       var aborted = false;
