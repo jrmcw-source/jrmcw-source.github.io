@@ -6,8 +6,8 @@
   "use strict";
   var E = window.ReversiEngine;
   var API = "https://jaiou-guestbook.jrmcw.workers.dev";
-  var LEVEL_NAMES = { amateur: "Amateur", player: "Player", sensei: "Sensei" };
-  var LEVEL_POINTS = { amateur: 1, player: 2, sensei: 3 };
+  var LEVEL_NAMES = { learner: "Learner", amateur: "Amateur", player: "Player", sensei: "Sensei" };
+  var LEVEL_POINTS = { learner: 0.5, amateur: 1, player: 2, sensei: 3 };
 
   var boardEl = document.getElementById("rev-board");
   var statusEl = document.getElementById("rev-status");

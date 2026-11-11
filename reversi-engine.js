@@ -193,6 +193,7 @@
   }
 
   var LEVELS = {
+    learner: { budget: 600, maxDepth: 1, solveAt: 4, looseness: 0.5, greed: true },
     amateur: { budget: 800, maxDepth: 1, solveAt: 6, looseness: 0.3, greed: true },
     player: { budget: 40000, maxDepth: 8, solveAt: 11, looseness: 0, greed: false },
     sensei: { budget: 200000, maxDepth: 64, solveAt: 14, looseness: 0, greed: false }
