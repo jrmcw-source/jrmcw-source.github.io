@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<title>Fishing · jaiou.com</title>
+<meta name="description" content="Fishing on the river at jaiou.com — cast a line, watch the bobber, and try for Old Whiskers. Land him and the river owes you the fishing badge.">
+</head><body id="top">
+<header class="site">
+<canvas id="binary" aria-hidden="true"></canvas>
+<div class="band"><h1>Jason McWhirter</h1><p class="role">Data Analyst — Lafayette, Louisiana</p></div>
+<div class="hsearch"><form action="https://mcwoogle.com/" method="get" target="_blank" rel="noopener" role="search"><input type="text" name="q" placeholder="Search" aria-label="Search"><button type="submit">Search</button></form></div>
+<nav class="menu"><div class="in"><a href="index.html">Home</a><a href="bio.html">Bio</a><a href="contact.html">Contact Info</a><a href="links.html">Links</a><a href="pics.html">Pics</a><a href="music.html">Music</a><a href="guestbook.html">Guestbook</a><a href="junk.html">Junk Drawer</a><a href="games.html" class="here">Games</a></div></nav>
+</header>
+<main>
+<p class="big">One rod, one bobber, and whatever the river feels like giving up. Most days it's bluegill. Some days it's an old boot. And once in a great while it's Old Whiskers — the flathead that's been down there longer than anybody can prove. Land him, and the river owes you a badge.</p>
+
+<div class="card">
+<p class="tag">The River</p>
+<svg id="fish-scene" viewBox="0 0 800 300" role="img" aria-label="A river, a dock, and a bobber">
+<rect x="0" y="0" width="800" height="120" fill="#dcebf3"/>
+<rect x="0" y="104" width="800" height="16" fill="#7fa36b"/>
+<rect x="0" y="120" width="800" height="180" fill="#175e8c"/>
+<rect x="0" y="120" width="800" height="10" fill="#0d3c5c" opacity="0.35"/>
+<g fill="#5d8a4e"><rect x="30" y="66" width="10" height="44"/><circle cx="35" cy="52" r="26"/><rect x="742" y="60" width="10" height="50"/><circle cx="747" cy="46" r="30"/><rect x="668" y="76" width="8" height="36"/><circle cx="672" cy="64" r="20"/></g>
+<g><rect x="0" y="196" width="150" height="10" fill="#8a5a1d"/><rect x="0" y="214" width="150" height="10" fill="#8a5a1d"/><rect x="12" y="196" width="10" height="60" fill="#6f4513"/><rect x="126" y="196" width="10" height="60" fill="#6f4513"/></g>
+<line id="rod" x1="118" y1="150" x2="330" y2="86" stroke="#6f4513" stroke-width="5" stroke-linecap="round"/>
+<line id="line" x1="330" y1="86" x2="330" y2="150" stroke="#fdfcf8" stroke-width="1.6" opacity="0"/>
+<g id="bobber" opacity="0">
+<ellipse id="ripple" cx="0" cy="0" rx="16" ry="4.5" fill="none" stroke="#bcd7ea" stroke-width="2" opacity="0.7"/>
+<circle cx="0" cy="-4" r="8" fill="#fdfcf8"/>
+<path d="M -8,-4 A 8,8 0 0 1 8,-4 Z" fill="#a03123"/>
+</g>
+<g id="splash" opacity="0" stroke="#bcd7ea" stroke-width="3" stroke-linecap="round">
+<line x1="-14" y1="-6" x2="-24" y2="-22"/><line x1="0" y1="-10" x2="0" y2="-30"/><line x1="14" y1="-6" x2="24" y2="-22"/>
+</g>
+</svg>
+<p id="fish-status" class="fish-status" role="status">The water's flat. Cast when you're ready.</p>
+<p><button type="button" id="fish-btn" class="fish-btn">Cast</button></p>
+<div id="fish-result" class="fish-result" hidden></div>
+<div id="fish-prize" class="fish-prize" hidden>
+<img src="images/badge-fishing.svg" alt="The jAIou fishing badge" class="fish-prizebadge">
+<div>
+<p class="fish-prizewin"><strong>You landed Old Whiskers.</strong> The fishing badge is yours.</p>
+<p id="fish-code" class="fish-code">Fetching your claim code…</p>
+<p class="fish-prizehow">Take the code to the <a href="guestbook.html">guestbook</a> and put it in the Code field when you post — the badge stamps your post.</p>
+</div>
+</div>
+</div>
+
+<div class="fish-layout">
+<div class="card">
+<p class="tag">What's in the river</p>
+<dl class="backr">
+<dt>Bluegill</dt><dd>Small, honest, and always hungry. Up to about a pound.</dd>
+<dt>Largemouth bass</dt><dd>The regular fight. One to six pounds, and he'll argue about all of it.</dd>
+<dt>Guadalupe bass</dt><dd>The Texas state fish — lives in these rivers and nowhere else on Earth.</dd>
+<dt>Channel catfish</dt><dd>Whiskers, but not <em>the</em> whiskers. Two to fourteen pounds.</dd>
+<dt>Flathead catfish</dt><dd>A serious fish. Five pounds and up, sometimes way up.</dd>
+<dt>Old Whiskers</dt><dd>Flathead, sixty pounds and better. He's down there. Probably.</dd>
+<dt>The old boot</dt><dd>Not a fish. The river gives back what it gets.</dd>
+</dl>
+</div>
+<div class="card">
+<p class="tag">Your stringer</p>
+<p class="fish-stats" id="fish-stats">No casts yet.</p>
+<ul class="fish-log" id="fish-log"></ul>
+</div>
+</div>
+</main>
+<footer><p>jason@jaiou.com · Lafayette, Louisiana · <a href="index.html">jaiou.com</a></p><p class="topwrap"><a class="totop" href="#top">↑ Top</a></p></footer>
+<script src="binary.js"></script>
+<script src="fishing.js" defer></script>
+</body>
+</html>

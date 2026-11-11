@@ -98,3 +98,26 @@ footer { max-width:880px; margin:0 auto; padding:0 22px 34px; color:var(--mut); 
   .gb-side { position: static; order: -1; }
   .gb-kids { margin-left: 8px; padding-left: 9px; }
 }
+
+/* Fishing game + games shelf (2026-11-11). */
+#fish-scene { width: 100%; height: auto; display: block; border-radius: 8px; }
+.fish-status { font-weight: 600; min-height: 1.5em; margin: 12px 0 8px; }
+.fish-btn { font: inherit; font-size: 1.15rem; font-weight: 700; padding: 12px 42px; border: 1px solid var(--acc); border-radius: 999px; color: #fff; background: var(--acc); cursor: pointer; }
+.fish-btn:hover { background: var(--acc2); }
+.fish-result { margin-top: 14px; border-top: 1px solid var(--line); padding-top: 12px; }
+.fish-catchname { font-size: 1.35rem; font-weight: 700; margin: 0 0 2px; }
+.fish-catchline { margin: 0; color: var(--mut); }
+.fish-prize { margin-top: 16px; border: 2px solid #e8c64b; border-radius: 10px; padding: 14px 16px; display: flex; gap: 16px; align-items: center; background: #fffdf2; }
+.fish-prizebadge { width: 120px; height: 120px; flex: none; }
+.fish-prizewin { margin: 0 0 4px; font-size: 1.08rem; }
+.fish-code { margin: 0 0 4px; font-size: 1.05rem; }
+.fish-prizehow { margin: 0; color: var(--mut); }
+.fish-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+.fish-layout .card { margin: 0; }
+@media (max-width: 760px) { .fish-layout { grid-template-columns: 1fr; } .fish-prize { flex-direction: column; text-align: center; } }
+.fish-stats { font-weight: 600; }
+.fish-log { margin: 6px 0 0; padding-left: 20px; }
+.fish-log li { margin: 2px 0; }
+.game-card { display: flex; gap: 18px; align-items: center; }
+.game-badge { width: 110px; height: 110px; flex: none; }
+@media (max-width: 560px) { .game-card { flex-direction: column; text-align: center; } }
