@@ -105,7 +105,7 @@
         if (state !== "bite") return;
         status.textContent = "It got away.";
         reset(1400);
-      }, 950);
+      }, 1600);
     }, 4200 + Math.random() * 6500);
   }
 

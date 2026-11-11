@@ -121,3 +121,6 @@ footer { max-width:880px; margin:0 auto; padding:0 22px 34px; color:var(--mut); 
 .game-card { display: flex; gap: 18px; align-items: center; }
 .game-badge { width: 110px; height: 110px; flex: none; }
 @media (max-width: 560px) { .game-card { flex-direction: column; text-align: center; } }
+
+/* A hidden panel stays hidden, even when its class sets a display (2026-11-11). */
+[hidden] { display: none !important; }
