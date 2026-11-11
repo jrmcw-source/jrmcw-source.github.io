@@ -27,6 +27,7 @@
 <p class="tag">The Guestbook</p>
 <div id="gb">
 <form id="gb-form" class="gb-form">
+<p id="gb-replying" class="gb-replying" hidden></p>
 <div class="gb-row">
 <p><label>Your name<br><input type="text" name="name" maxlength="40" required></label></p>
 <p><label>Email<br><input type="email" name="email" maxlength="120"></label></p>
@@ -37,7 +38,10 @@
 <p><button type="submit" class="gb-submit">Post it</button></p>
 </form>
 <p id="gb-note" class="gb-note" role="status"></p>
+<div class="gb-layout">
 <div id="gb-posts" class="gb-posts"><p class="gb-empty">Loading the board…</p></div>
+<aside class="gb-side"><p class="gb-sidetag">Opening posts</p><div id="gb-index"></div></aside>
+</div>
 <p class="gb-ownerline"><button type="button" id="gb-owner" class="gb-minibtn">Owner</button> <span id="gb-ownertools"></span></p>
 </div>
 <script src="guestbook.js" defer></script>

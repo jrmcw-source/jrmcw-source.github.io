@@ -80,3 +80,21 @@ footer { max-width:880px; margin:0 auto; padding:0 22px 34px; color:var(--mut); 
 .gb-row p { margin: 0; }
 @media (max-width: 560px) { .gb-row { grid-template-columns: 1fr; } .gb-row p { margin: .35rem 0; } }
 .card:has(> #gb) { padding: 16px 18px; }
+
+/* Threaded replies + opening-posts rail (2026-11-11). */
+.gb-replying { font-weight: 600; margin: .2rem 0 .45rem; }
+.gb-layout { display: grid; grid-template-columns: minmax(0, 1fr) 250px; gap: 1.2rem; align-items: start; }
+.gb-side { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; position: sticky; top: 12px; }
+.gb-sidetag { font-weight: 600; margin: 0 0 4px; }
+.gb-idxitem { display: block; width: 100%; text-align: left; font: inherit; background: none; border: none; border-top: 1px solid var(--line); padding: 7px 2px; cursor: pointer; color: var(--ink); }
+.gb-idxwho { font-weight: 600; }
+.gb-idxwhen { color: var(--mut); }
+.gb-idxex { display: block; color: var(--mut); font-size: .9rem; margin-top: 2px; }
+.gb-kids { margin-left: 14px; border-left: 2px solid var(--line); padding-left: 12px; }
+.gb-post { scroll-margin-top: 14px; }
+.gb-flash { background: #fdf6d8; transition: background 1.4s ease; }
+@media (max-width: 760px) {
+  .gb-layout { grid-template-columns: 1fr; }
+  .gb-side { position: static; order: -1; }
+  .gb-kids { margin-left: 8px; padding-left: 9px; }
+}
