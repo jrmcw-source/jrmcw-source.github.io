@@ -11,6 +11,15 @@
   if (!postsBox || !form) return;
   var replyTo = null;
   var isOwnerNow = false;
+  var badgesBox = document.getElementById("gb-badges");
+
+  // kind -> [image, caption under a post, label on the badge board]
+  var BADGE_DISPLAY = {
+    mcwoogle: ["images/jaiou-badge.svg", "jAIou badge — won on McWoogle, four searches deep", "McWoogle badge"],
+    fishing: ["images/badge-fishing.svg", "Fishing badge — landed Old Whiskers", "Fishing badge"],
+    othello: ["images/badge-othello.svg", "Othello badge — beat the computer", "Othello badge"],
+    music: ["images/badge-music.svg", "Music badge — granted by Jason", "Music badge — granted by Jason"]
+  };
 
   function ownerKey() {
     try { return localStorage.getItem("gb_admin") || ""; } catch (e) { return ""; }
@@ -67,15 +76,16 @@
     wrap.appendChild(head);
 
     if (post.badge) {
+      var bk = BADGE_DISPLAY[post.badge_kind] || BADGE_DISPLAY.mcwoogle;
       var b = document.createElement("p");
       b.className = "gb-badge";
       var img = document.createElement("img");
-      img.src = "images/jaiou-badge.svg";
-      img.alt = "The jAIou badge";
+      img.src = bk[0];
+      img.alt = "A jAIou game badge";
       img.className = "gb-badgeimg";
       b.appendChild(img);
       var cap = document.createElement("span");
-      cap.textContent = "jAIou badge — won on McWoogle, four searches deep";
+      cap.textContent = bk[1];
       b.appendChild(cap);
       wrap.appendChild(b);
     }
@@ -188,10 +198,47 @@
     }
   }
 
+  function renderBadges(rows) {
+    if (!badgesBox) return;
+    badgesBox.textContent = "";
+    if (!rows.length) {
+      var p = document.createElement("p");
+      p.className = "gb-empty";
+      p.textContent = "No badges yet — they're won in the Games, up in the menu.";
+      badgesBox.appendChild(p);
+      return;
+    }
+    rows.forEach(function (row) {
+      var bk = BADGE_DISPLAY[row.badge_kind] || BADGE_DISPLAY.mcwoogle;
+      var div = document.createElement("div");
+      div.className = "bb-row";
+      var img = document.createElement("img");
+      img.src = bk[0];
+      img.alt = "";
+      img.className = "bb-img";
+      div.appendChild(img);
+      var who = document.createElement("span");
+      var nm = document.createElement("strong");
+      nm.textContent = row.name;
+      who.appendChild(nm);
+      who.appendChild(document.createTextNode(" — " + bk[2] + (row.count > 1 ? " × " + row.count : "")));
+      div.appendChild(who);
+      badgesBox.appendChild(div);
+    });
+  }
+
+  function loadBadges() {
+    if (!badgesBox) return;
+    fetch(API + "/badges")
+      .then(function (r) { return r.json(); })
+      .then(function (d) { renderBadges(d.badges || []); })
+      .catch(function () { /* the board below still stands on its own */ });
+  }
+
   function load() {
     fetch(API + "/posts")
       .then(function (r) { return r.json(); })
-      .then(function (d) { render(d.posts || []); })
+      .then(function (d) { render(d.posts || []); loadBadges(); })
       .catch(function () {
         postsBox.textContent = "";
         var p = document.createElement("p");

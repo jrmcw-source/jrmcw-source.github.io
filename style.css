@@ -124,3 +124,8 @@ footer { max-width:880px; margin:0 auto; padding:0 22px 34px; color:var(--mut); 
 
 /* A hidden panel stays hidden, even when its class sets a display (2026-11-11). */
 [hidden] { display: none !important; }
+
+/* Badge board (2026-11-11). */
+.bb-row { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line); }
+.bb-row:first-child { border-top: none; padding-top: 2px; }
+.bb-img { width: 38px; height: 38px; flex: none; }

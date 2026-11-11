@@ -17,12 +17,14 @@
 
   // name, weight range in lb (null = no weight), share of the bite, flavor line
   var RIVER = [
-    { name: "Bluegill", min: 0.2, max: 1.1, share: 34, line: "Small, honest, and always hungry." },
-    { name: "Largemouth bass", min: 1.0, max: 6.5, share: 26, line: "Put up a fight about it, too." },
-    { name: "Guadalupe bass", min: 0.5, max: 3.2, share: 15, line: "The Texas state fish, right where he belongs." },
-    { name: "Channel catfish", min: 2.0, max: 14.0, share: 12, line: "Whiskers — but not the whiskers." },
-    { name: "Flathead catfish", min: 5.0, max: 38.0, share: 6, line: "A serious fish. Not the legend, but serious." },
-    { name: "The old boot", min: null, max: null, share: 5, line: "Not a fish. The river gives back what it gets." },
+    { name: "Bluegill", min: 0.2, max: 1.1, share: 31, line: "Small, honest, and always hungry." },
+    { name: "Largemouth bass", min: 1.0, max: 6.5, share: 24, line: "Put up a fight about it, too." },
+    { name: "Guadalupe bass", min: 0.5, max: 3.2, share: 14, line: "The Texas state fish, right where he belongs." },
+    { name: "Channel catfish", min: 2.0, max: 14.0, share: 11, line: "Whiskers — but not the whiskers." },
+    { name: "Rio Grande cichlid", min: 0.3, max: 1.6, share: 6, line: "The only cichlid native to the country, right here in the Blanco." },
+    { name: "Flathead catfish", min: 5.0, max: 38.0, share: 5, line: "A serious fish. Not the legend, but serious." },
+    { name: "Gar", min: 2.0, max: 42.0, share: 3, line: "Long as a telephone pole. Well — a big gar." },
+    { name: "The old boot", min: null, max: null, share: 4, line: "Not a fish. The river gives back what it gets." },
     { name: "Old Whiskers", min: 55.0, max: 72.0, share: 2, line: "Every story was true." },
   ];
 
@@ -105,7 +107,7 @@
         if (state !== "bite") return;
         status.textContent = "It got away.";
         reset(1400);
-      }, 1600);
+      }, 2200);
     }, 4200 + Math.random() * 6500);
   }
 
