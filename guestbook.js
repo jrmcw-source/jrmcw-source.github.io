@@ -340,6 +340,31 @@
     });
   }
 
+  // This week on the porch: one question a week, the same for everybody,
+  // changing Mondays (Chicago time). Twelve questions, then around again.
+  var WEEK_QUESTIONS = [
+    "Best fish story you ever heard — true or not.",
+    "What song takes you straight back to high school?",
+    "Best meal you ever had, and where?",
+    "Who taught you the most without ever trying to?",
+    "First car you ever drove — what happened to it?",
+    "The best advice you never took.",
+    "A place you'd go back to tomorrow if you could.",
+    "What did your hometown have that it's lost?",
+    "The teacher you still think about.",
+    "Best day you ever had on the water.",
+    "What would you tell yourself at seventeen?",
+    "A smell that brings somebody back."
+  ];
+  var weekEl = document.getElementById("gb-week-q");
+  if (weekEl) {
+    var chi = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }));
+    var epoch = new Date(2026, 0, 5); // a Monday
+    var weeks = Math.floor((chi.getTime() - epoch.getTime()) / 604800000);
+    var n = WEEK_QUESTIONS.length;
+    weekEl.textContent = WEEK_QUESTIONS[((weeks % n) + n) % n];
+  }
+
   paintOwnerTools();
   load();
 })();

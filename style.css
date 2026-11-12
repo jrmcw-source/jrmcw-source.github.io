@@ -184,3 +184,7 @@ footer { max-width:880px; margin:0 auto; padding:0 22px 34px; color:var(--mut); 
 .board-seasons { display: flex; gap: 8px; margin: 10px 0 4px; }
 .board-season { font: inherit; font-size: .92rem; padding: 6px 14px; border: 1px solid var(--line); border-radius: 999px; background: #fff; cursor: pointer; }
 .board-season.board-season-on { background: #1f3050; color: #fdfcf8; border-color: #1f3050; font-weight: 700; }
+
+/* This week on the porch — added 2026-11-12. */
+.gb-week { font-size: 1.05rem; margin: 2px 0 12px; }
+.gb-week span { font-weight: 600; }
