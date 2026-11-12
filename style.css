@@ -141,7 +141,10 @@ footer { max-width:880px; margin:0 auto; padding:0 16px 30px; color:var(--mut); 
 .fish-log { margin: 6px 0 0; padding-left: 20px; }
 .fish-log li { margin: 2px 0; }
 .game-card { display: flex; flex-direction: column; text-align: center; gap: 18px; align-items: center; }
-.game-badge { width: 110px; height: 110px; flex: none; }
+.game-badge { width: 110px; height: 110px; flex: none; display: block; }
+.game-card > a { flex: none; }
+.gb-photo { max-width: 100%; height: auto; display: block; margin-top: 8px; border: 1px solid var(--line); border-radius: 10px; }
+.gb-thumb { max-height: 90px; width: auto; border: 1px solid var(--line); border-radius: 8px; }
 @media (min-width: 561px) {
   .game-card { flex-direction: row; text-align: left; }
   .fish-btn { padding: 12px 42px; }

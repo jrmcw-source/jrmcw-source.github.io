@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="style.css?v=20261112-4">
+<link rel="stylesheet" href="style.css?v=20261112-5">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.webmanifest">
@@ -37,6 +37,8 @@
 <p><label>Code<br><input type="text" name="code" maxlength="20"></label></p>
 </div>
 <p><label>Say it<br><textarea name="message" rows="2" maxlength="1000" required></textarea></label></p>
+<p><label>Photo<br><input type="file" id="gb-photo" accept="image/*"></label></p>
+<p id="gb-photoprev" hidden><img id="gb-thumb" class="gb-thumb" alt="The photo you picked"></p>
 <p class="gb-trap" aria-hidden="true"><label>Website<br><input type="text" name="website" tabindex="-1" autocomplete="off"></label></p>
 <p><button type="submit" class="gb-submit">Post it</button></p>
 </form>
@@ -47,7 +49,7 @@
 </div>
 <p class="gb-ownerline"><button type="button" id="gb-owner" class="gb-minibtn">Owner</button> <span id="gb-ownertools"></span></p>
 </div>
-<script src="guestbook.js?v=20261112-8" defer></script>
+<script src="guestbook.js?v=20261112-9" defer></script>
 </div>
 
 <div class="card">

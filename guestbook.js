@@ -114,6 +114,15 @@
     msg.textContent = post.message;
     wrap.appendChild(msg);
 
+    if (post.image) {
+      var ph = document.createElement("img");
+      ph.className = "gb-photo";
+      ph.src = API + "/image/" + post.id;
+      ph.alt = "A photo hung with this post";
+      ph.loading = "lazy";
+      wrap.appendChild(ph);
+    }
+
     var tools = document.createElement("p");
     tools.className = "gb-tools";
     var reply = document.createElement("button");
@@ -286,6 +295,42 @@
       });
   }
 
+  // A photo for the post: shrunk here in the browser (never wider than
+  // 1000px, as a JPEG) so what reaches the board is porch-sized.
+  var photoInput = document.getElementById("gb-photo");
+  var photoPrev = document.getElementById("gb-photoprev");
+  var photoThumb = document.getElementById("gb-thumb");
+  var pendingImage = null;
+  if (photoInput) photoInput.addEventListener("change", function () {
+    pendingImage = null;
+    if (photoPrev) photoPrev.hidden = true;
+    var file = photoInput.files && photoInput.files[0];
+    if (!file) return;
+    if (!/^image\//.test(file.type)) {
+      note.textContent = "That file is not a picture.";
+      photoInput.value = "";
+      return;
+    }
+    var url = URL.createObjectURL(file);
+    var img = new Image();
+    img.onload = function () {
+      var scale = Math.min(1, 1000 / Math.max(img.width, img.height));
+      var cv = document.createElement("canvas");
+      cv.width = Math.max(1, Math.round(img.width * scale));
+      cv.height = Math.max(1, Math.round(img.height * scale));
+      cv.getContext("2d").drawImage(img, 0, 0, cv.width, cv.height);
+      URL.revokeObjectURL(url);
+      pendingImage = cv.toDataURL("image/jpeg", 0.85);
+      if (photoThumb) photoThumb.src = pendingImage;
+      if (photoPrev) photoPrev.hidden = false;
+    };
+    img.onerror = function () {
+      URL.revokeObjectURL(url);
+      note.textContent = "That picture would not open — try another.";
+    };
+    img.src = url;
+  });
+
   form.addEventListener("submit", function (ev) {
     ev.preventDefault();
     note.textContent = "Posting…";
@@ -296,6 +341,7 @@
       message: form.elements["message"].value,
       website: form.elements["website"].value,
     };
+    if (pendingImage) payload.image = pendingImage;
     if (replyTo) payload.parent_id = replyTo.id;
     fetch(API + "/posts", {
       method: "POST",
@@ -309,6 +355,9 @@
           clearReply();
           form.elements["message"].value = "";
           form.elements["code"].value = "";
+          if (photoInput) photoInput.value = "";
+          pendingImage = null;
+          if (photoPrev) photoPrev.hidden = true;
           note.textContent = res.d.badge_error ? res.d.badge_error : (wasReply ? "Posted — it is under the post you answered." : "Posted — it is on the board below.");
           load();
         } else {
