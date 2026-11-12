@@ -223,6 +223,9 @@
         }, t);
       })(1200 + i * 1500 + Math.random() * 900);
     }
+    // The sink timer runs random, both ends of it (Jason, 2026-11-12):
+    // three to nine seconds until the bobber goes under, and three to
+    // nine seconds that it stays under before the fish is gone.
     later(function () {
       if (state !== "waiting") return;
       state = "bite";
@@ -233,8 +236,8 @@
         if (state !== "bite") return;
         status.textContent = "It got away.";
         reset(1400);
-      }, 2200);
-    }, 4200 + Math.random() * 6500);
+      }, 3000 + Math.random() * 6000);
+    }, 3000 + Math.random() * 6000);
   }
 
   function pickCatch() {
