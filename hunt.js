@@ -43,7 +43,7 @@
     save(s);
   });
   candInput.addEventListener("input", function () {
-    candInput.value = candInput.value.toLowerCase().replace(/[^a-z]/g, "").slice(0, 5);
+    candInput.value = candInput.value.toLowerCase().replace(/[^a-z]/g, "");
   });
   candInput.addEventListener("keydown", function (ev) {
     if (ev.key === "Enter") { ev.preventDefault(); tryOne(); }
@@ -72,8 +72,8 @@
   function tryOne() {
     if (busy) return;
     var candidate = candInput.value.trim().toLowerCase();
-    if (!/^[a-z]{3,5}$/.test(candidate)) {
-      status.textContent = "Three to five letters — that's the size of it.";
+    if (!/^[a-z]+$/.test(candidate)) {
+      status.textContent = "Type a name to try.";
       return;
     }
     busy = true;
