@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<title>The Domain Hunt · jaiou.com</title>
+<meta name="description" content="The Domain Hunt at jaiou.com — five tries a day, three to five letters, checked at the registry itself. Find a .com nobody has registered. The name is never repeated.">
+</head><body id="top">
+<header class="site">
+<canvas id="binary" aria-hidden="true"></canvas>
+<div class="band"><h1>Jason McWhirter</h1><p class="role">Data Analyst — Lafayette, Louisiana</p></div>
+<div class="hsearch"><form action="https://mcwoogle.com/" method="get" target="_blank" rel="noopener" role="search"><input type="text" name="q" placeholder="Search" aria-label="Search"><button type="submit">Search</button></form></div>
+<nav class="menu"><div class="in"><a href="index.html">Home</a><a href="bio.html">Bio</a><a href="contact.html">Contact Info</a><a href="links.html">Links</a><a href="pics.html">Pics</a><a href="music.html">Music</a><a href="guestbook.html">Guestbook</a><a href="junk.html">Junk Drawer</a><a href="games.html" class="here">Games</a></div></nav>
+</header>
+<main>
+<p class="big">Back when a domain cost $35 — and $35 was a fortune — you typed an address by hand and hoped. The hunt is the same now, except the looking is free. Five tries a day: three to five letters, checked at the registry itself. Find one nobody has registered and you've won. The name is never repeated, not even here — it goes on a private list, and that's the last anybody hears of it.</p>
+
+<div class="card">
+<p class="tag">The hunt</p>
+<label class="board-name-label" for="hunt-name">Your name</label>
+<input id="hunt-name" class="board-name-input" type="text" maxlength="40" autocomplete="off">
+<div class="hunt-tryrow">
+<input id="hunt-candidate" class="board-name-input hunt-input" type="text" maxlength="5" autocomplete="off" aria-label="Name to try">
+<span class="hunt-tld">.com</span>
+<button type="button" id="hunt-btn" class="fish-btn hunt-btn">Try it</button>
+</div>
+<p id="hunt-status" class="rev-status" role="status"></p>
+<p id="hunt-meta" class="board-note"></p>
+<div id="hunt-prize" class="rev-prize" hidden>
+<img src="images/badge-hunt.svg" alt="The jAIou domain hunt badge" class="fish-prizebadge">
+<div>
+<p class="fish-prizewin"><strong>You found one.</strong></p>
+<p class="fish-prizehow">The badge is yours. Take this claim code to the <a href="guestbook.html">guestbook</a> and put it in the Code field when you post — the badge stamps your post. The name you found is never repeated, not even here.</p>
+<p id="hunt-code" class="rev-code"></p>
+</div>
+</div>
+<p class="rev-fineprint">Five tries a day, counted in Lafayette time, and a try the registry can't answer doesn't count. Finds are written down privately — the names are never published.</p>
+</div>
+</main>
+<footer><p>jason@jaiou.com · Lafayette, Louisiana · <a href="index.html">jaiou.com</a></p><p class="topwrap"><a class="totop" href="#top">↑ Top</a></p></footer>
+<script src="share-card.js"></script>
+<script src="hunt.js"></script>
+<script src="binary.js"></script>
+</body>
+</html>

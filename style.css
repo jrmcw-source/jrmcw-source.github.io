@@ -188,3 +188,9 @@ footer { max-width:880px; margin:0 auto; padding:0 22px 34px; color:var(--mut); 
 /* This week on the porch — added 2026-11-12. */
 .gb-week { font-size: 1.05rem; margin: 2px 0 12px; }
 .gb-week span { font-weight: 600; }
+
+/* The Domain Hunt — added 2026-11-12. */
+.hunt-tryrow { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
+.hunt-input { letter-spacing: 2px; width: 190px; }
+.hunt-tld { font-weight: 700; font-size: 1.05rem; }
+.hunt-btn { font-size: 1rem; padding: 9px 28px; }
