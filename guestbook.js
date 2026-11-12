@@ -20,7 +20,11 @@
     othello: ["images/badge-othello.svg", "Reversi badge — leader of the board", "Reversi badge"],
     music: ["images/badge-music.svg", "Music badge — granted by Jason", "Music badge — granted by Jason"],
     hunt: ["images/badge-hunt.svg", "Domain Hunt badge — found one", "Domain Hunt badge"],
-    porch: ["images/badge-porch.svg", "Porch Regular — a week of Top Three ballots", "Porch Regular badge"]
+    porch: ["images/badge-porch.svg", "Porch Regular — Top Three ballots, kept daily", "Porch Regular badge"],
+    porch1: ["images/badge-porch1.svg", "Porch Regular — one bar", "Porch Regular badge, one bar"],
+    porch2: ["images/badge-porch2.svg", "Porch Regular — two bars", "Porch Regular badge, two bars"],
+    porch3: ["images/badge-porch3.svg", "Porch Regular — three bars", "Porch Regular badge, three bars"],
+    porchg: ["images/badge-porchg.svg", "Porch Regular — the gold badge", "Porch Regular gold badge"]
   };
 
   function ownerKey() {
@@ -125,6 +129,25 @@
         });
       });
       tools.appendChild(hide);
+      if (post.badge) {
+        var strip = document.createElement("button");
+        strip.type = "button";
+        strip.textContent = "Strip badge";
+        strip.addEventListener("click", function () {
+          fetch(API + "/admin/strip-badge", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "X-Admin-Key": ownerKey() },
+            body: JSON.stringify({ id: post.id }),
+          }).then(function (r) {
+            if (r.status === 403) {
+              try { localStorage.removeItem("gb_admin"); } catch (e) {}
+              note.textContent = "That owner key did not work — it has been cleared. Tap Owner to enter it again.";
+            }
+            load();
+          });
+        });
+        tools.appendChild(strip);
+      }
     }
     wrap.appendChild(tools);
 

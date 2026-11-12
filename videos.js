@@ -89,17 +89,34 @@
   var voting = false;
 
   // The streak is the visitor's prize: days of ballots in a row, and days
-  // in a row of calling the winner. A week of ballots earns Porch Regular.
-  var claim = { code: null, busy: false };
+  // in a row of calling the winner. The badge climbs a ladder as the
+  // streak grows — the rungs are a mystery by design; promotions simply
+  // arrive. Nothing on this page ever names a rung ahead.
+  var TIER_ART = {
+    porch: "images/badge-porch.svg",
+    porch1: "images/badge-porch1.svg",
+    porch2: "images/badge-porch2.svg",
+    porch3: "images/badge-porch3.svg",
+    porchg: "images/badge-porchg.svg",
+  };
+  var TIER_NAME = {
+    porch: "Porch Regular",
+    porch1: "Porch Regular — one bar",
+    porch2: "Porch Regular — two bars",
+    porch3: "Porch Regular — three bars",
+    porchg: "Porch Regular — the gold badge",
+  };
+  var claim = { kind: null, code: null, busy: false };
   function renderStreak() {
     var s = data && data.streak;
     if (!s || !s.ballots) { streakCard.hidden = true; return; }
     streakCard.hidden = false;
     streakBox.textContent = "";
+    if (s.tier !== claim.kind) { claim.kind = s.tier; claim.code = null; }
     var head = el("div", "bb-row");
     var img = document.createElement("img");
     img.className = "bb-img";
-    img.src = "images/badge-porch.svg";
+    img.src = TIER_ART[s.tier] || TIER_ART.porch;
     img.alt = "";
     head.appendChild(img);
     var txt = el("div");
@@ -107,38 +124,43 @@
     if (s.called > 0) line += " · called it " + s.called + " running";
     txt.appendChild(el("p", "fish-stats", line));
     if (s.badge) {
-      txt.appendChild(el("p", "board-note", "That's a week — you're a Porch Regular. The badge below is yours."));
+      txt.appendChild(el("p", "board-note", "You're " + (s.tier === "porchg" ? "wearing the gold badge" : "a " + TIER_NAME[s.tier]) + "."));
     } else {
-      var left = 7 - s.ballots;
-      txt.appendChild(el("p", "board-note", left + (left === 1 ? " more day" : " more days") + " to Porch Regular. One missed day a month doesn't break it."));
+      txt.appendChild(el("p", "board-note", "Keep showing up — the porch takes care of its regulars. One missed day a month doesn't break it."));
     }
     head.appendChild(txt);
     streakBox.appendChild(head);
-    if (s.badge) streakBox.appendChild(claimPanel());
+    if (s.badge) {
+      streakBox.appendChild(claimPanel(s));
+      if (s.has_next) {
+        streakBox.appendChild(el("p", "board-note", "Keep showing up. The badge isn't finished changing."));
+      } else {
+        streakBox.appendChild(el("p", "board-note", "Top of the porch — for now."));
+      }
+    }
   }
-  function claimPanel() {
+  function claimPanel(s) {
     var panel = el("div", "fish-prize");
     var img = document.createElement("img");
     img.className = "fish-prizebadge";
-    img.src = "images/badge-porch.svg";
-    img.alt = "The Porch Regular badge";
+    img.src = TIER_ART[s.tier];
+    img.alt = "The " + TIER_NAME[s.tier] + " badge";
     panel.appendChild(img);
     var txt = el("div");
+    txt.appendChild(el("p", "fish-prizewin", TIER_NAME[s.tier] + " — ballots kept, days running."));
     if (claim.code) {
-      txt.appendChild(el("p", "fish-prizewin", "Porch Regular — a week of ballots, kept."));
       txt.appendChild(el("p", "fish-code", "Your code: " + claim.code));
       txt.appendChild(el("p", "fish-prizehow", "Put it in the Code box when you sign the Guestbook and the badge rides along with your post."));
       var sh = el("div");
       txt.appendChild(sh);
       if (window.JaiouShare) {
         window.JaiouShare.attach(sh, {
-          text: "Porch Regular at jAIou — a week of Top Three ballots, kept.\nThe Top Three, every day: jaiou.com/videos.html",
+          text: TIER_NAME[s.tier] + " at jAIou — Top Three ballots, kept daily.\nThe Top Three, every day: jaiou.com/videos.html",
           filename: "jaiou-porch-regular.png",
-          image: { bg: "#1f3050", accent: "#c9d2da", title: "Porch Regular", lines: ["A week of Top Three ballots, kept", "jAIou · jaiou.com/videos.html"] },
+          image: { bg: "#1f3050", accent: "#c9d2da", title: TIER_NAME[s.tier], lines: ["Top Three ballots, kept daily", "jAIou · jaiou.com/videos.html"] },
         });
       }
     } else {
-      txt.appendChild(el("p", "fish-prizewin", "Porch Regular — a week of ballots, kept."));
       var b = el("button", "gb-submit", "Claim your badge");
       b.type = "button";
       b.addEventListener("click", claimBadge);
@@ -149,9 +171,9 @@
     return panel;
   }
   function claimBadge() {
-    if (claim.busy || claim.code) return;
+    if (claim.busy || claim.code || !claim.kind) return;
     claim.busy = true;
-    fetch(API + "/badge/issue?kind=porch")
+    fetch(API + "/badge/issue?kind=" + claim.kind)
       .then(function (r) { return r.json().then(function (d) { return { status: r.status, data: d }; }); })
       .then(function (res) {
         if (res.status === 200 && res.data.code) claim.code = res.data.code;
