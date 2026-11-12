@@ -1,55 +1,82 @@
-/* jaiou.com site styles */
+/* jaiou.com site styles.
+   Rebuilt 2026-11-12, phone-first: the base below is the phone design,
+   and min-width layers widen it into the desktop presentation.
+   Same palette, same classes, one site for every screen. */
 :root { --ink:#1c2430; --mut:#5a6572; --line:#dfe5ea; --acc:#175e8c; --acc2:#0d3c5c; --bg:#fbfcfd; --card:#ffffff; }
 * { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
 body { margin:0; font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color:var(--ink); background:var(--bg); line-height:1.6; font-size:17.5px; }
 a { color: var(--acc); }
+img { max-width: 100%; }
+
+/* Header, search, menu */
 header.site { position:relative; background:var(--acc2); color:#fff; overflow:hidden; }
-header.site .band { position:relative; max-width:880px; margin:0 auto; padding:34px 22px 26px; z-index:2; }
+header.site .band { position:relative; max-width:880px; margin:0 auto; padding:22px 16px 14px; z-index:2; }
 header.site canvas#binary { position:absolute; inset:0; width:100%; height:100%; z-index:1; opacity:.5; }
-header.site h1 { margin:0 0 2px; font-size:2.3rem; letter-spacing:-0.01em; }
-header.site .role { margin:0; font-size:1.12rem; font-weight:600; color:#bcd7ea; }
+header.site h1 { margin:0 0 2px; font-size:1.85rem; letter-spacing:-0.01em; }
+header.site .role { margin:0; font-size:1.02rem; font-weight:600; color:#bcd7ea; }
+.hsearch { position:relative; z-index:2; max-width:880px; margin:0 auto; padding:0 16px 12px; }
+.hsearch form { display:flex; gap:6px; }
+.hsearch input { flex:1; min-width:0; font-size:16px; padding:8px 10px; border:1px solid #888; border-radius:4px; }
+.hsearch button { font-size:16px; padding:8px 14px; border:1px solid #888; border-radius:4px; background:#f4f4f4; cursor:pointer; }
 nav.menu { position:relative; z-index:2; background:rgba(10,32,48,.55); }
-nav.menu .in { max-width:880px; margin:0 auto; padding:0 14px; display:flex; flex-wrap:wrap; gap:2px; }
-nav.menu a { color:#eaf3f9; text-decoration:none; font-weight:600; padding:13px 14px; display:block; }
+nav.menu .in { max-width:880px; margin:0 auto; padding:0 6px; display:flex; flex-wrap:wrap; gap:2px; }
+nav.menu a { color:#eaf3f9; text-decoration:none; font-weight:600; padding:11px 10px; display:block; }
 nav.menu a:hover { background:rgba(255,255,255,.12); }
 nav.menu a.here { background:#fff; color:var(--acc2); }
 .bannerimg { display:block; width:100%; max-height:300px; object-fit:cover; }
-main { max-width:880px; margin:0 auto; padding:30px 22px 56px; }
+@media (min-width: 761px) {
+  header.site .band { padding:34px 22px 26px; }
+  header.site h1 { font-size:2.3rem; }
+  header.site .role { font-size:1.12rem; }
+  .hsearch { margin:-12px auto 8px; padding:0 22px; text-align:right; }
+  .hsearch form { display:block; }
+  .hsearch input { width:160px; font-size:14px; padding:4px 8px; }
+  .hsearch button { font-size:14px; padding:4px 10px; margin-left:4px; }
+  nav.menu .in { padding:0 14px; }
+  nav.menu a { padding:13px 14px; }
+}
+@media (prefers-reduced-motion: reduce) { header.site canvas#binary { display:none; } }
+
+/* Content frame */
+main { max-width:880px; margin:0 auto; padding:22px 16px 44px; }
 h2 { font-size:1.45rem; margin:26px 0 8px; }
 h2:first-child { margin-top:0; }
 .tag { font-size:.82rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--mut); margin:0 0 6px; }
-.card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:20px 22px; margin:0 0 18px; }
+.card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px; margin:0 0 18px; }
 .card p { margin:0 0 10px; } .card p:last-child { margin-bottom:0; }
 .figs { font-weight:600; }
 .links a { margin-right:16px; white-space:nowrap; font-weight:600; text-decoration:none; }
 .links a:hover { text-decoration:underline; }
-.portrait { float:right; width:190px; height:190px; object-fit:cover; border-radius:12px; margin:4px 0 14px 20px; border:3px solid #fff; box-shadow:0 2px 10px rgba(20,40,60,.25); }
+.portrait { display:block; float:none; width:168px; height:168px; object-fit:cover; border-radius:12px; margin:0 auto 14px; border:3px solid #fff; box-shadow:0 2px 10px rgba(20,40,60,.25); }
 .heropic { width:100%; border-radius:10px; display:block; margin:0 0 8px; }
 figure { margin:0 0 22px; } figcaption { color:var(--mut); font-size:.95rem; margin-top:6px; }
 .slot { border:2px dashed var(--line); border-radius:10px; padding:34px 20px; text-align:center; color:var(--mut); background:#fff; }
 dl.backr { margin:0; } dl.backr dt { font-weight:700; margin-top:14px; } dl.backr dd { margin:2px 0 0 0; color:var(--ink); }
-footer { max-width:880px; margin:0 auto; padding:0 22px 34px; color:var(--mut); font-size:.92rem; }
+footer { max-width:880px; margin:0 auto; padding:0 16px 30px; color:var(--mut); font-size:.92rem; }
 .big { font-size:1.08rem; }
 .pron { font-size:1.05rem; }
-@media (prefers-reduced-motion: reduce) { header.site canvas#binary { display:none; } }
+@media (min-width: 561px) {
+  .portrait { float:right; width:190px; height:190px; margin:4px 0 14px 20px; }
+}
+@media (min-width: 761px) {
+  main { padding:30px 22px 56px; }
+  .card { padding:20px 22px; }
+  footer { padding:0 22px 34px; }
+}
 
+/* Top button at the foot of every page — added 2026-11-10. */
+.topwrap { text-align:center; margin:14px 0 0; }
+.totop { display:inline-block; padding:8px 26px; border:1px solid var(--acc); border-radius:999px; color:var(--acc); background:#fff; font-weight:600; text-decoration:none; }
+.totop:hover { background:var(--acc); color:#fff; }
+
+/* Music page tracks */
 .track { border-top:1px solid var(--line); padding:12px 0 14px; }
 .track .t { font-weight:600; }
 .track .c { color:var(--mut); }
 .track .d { color:var(--mut); font-variant-numeric:tabular-nums; }
 .track audio { width:100%; margin-top:6px; }
 
-.hsearch { position:relative; z-index:2; max-width:880px; margin:-12px auto 8px; padding:0 22px; text-align:right; }
-.hsearch input { font-size:14px; padding:4px 8px; width:160px; border:1px solid #888; border-radius:4px; }
-.hsearch button { font-size:14px; padding:4px 10px; margin-left:4px; border:1px solid #888; border-radius:4px; background:#f4f4f4; cursor:pointer; }
-
-.topwrap { text-align:center; margin:14px 0 0; }
-.totop { display:inline-block; padding:8px 26px; border:1px solid var(--acc); border-radius:999px; color:var(--acc); background:#fff; font-weight:600; text-decoration:none; }
-.totop:hover { background:var(--acc); color:#fff; }
-
-/* Top button at the foot of every page — added 2026-11-10. */
-
-/* Deploy retry 2026-11-10 — Pages sync timed out twice on the 274 MB package; no style change. */
 /* Guestbook board (added with the Cloudflare guestbook build, 2026-11-10). */
 .gb-form label { font-weight: 600; }
 .gb-form input[type="text"], .gb-form input[type="email"], .gb-form textarea { width: 100%; box-sizing: border-box; font: inherit; font-weight: 400; padding: 8px 10px; margin-top: 4px; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: var(--ink); }
@@ -61,66 +88,68 @@ footer { max-width:880px; margin:0 auto; padding:0 22px 34px; color:var(--mut); 
 .gb-post { border-top: 1px solid var(--line); padding: 12px 0 14px; }
 .gb-head { margin: 0 0 4px; }
 .gb-when { color: var(--mut); }
-.gb-msg { margin: 0; white-space: pre-wrap; }
+.gb-msg { margin: 0; white-space: pre-wrap; overflow-wrap: break-word; }
 .gb-badge { margin: 4px 0; display: flex; align-items: center; gap: 10px; color: var(--acc2); font-weight: 600; }
 .gb-badgeimg { height: 46px; width: 46px; }
 .gb-empty { color: var(--mut); }
 .gb-ownerline { margin-top: 16px; }
-.gb-minibtn, .gb-tools button, #gb-ownertools button { font: inherit; font-size: .88rem; padding: 4px 12px; margin-right: 8px; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: var(--mut); cursor: pointer; }
+.gb-minibtn, .gb-tools button, #gb-ownertools button { font: inherit; font-size: .88rem; padding: 6px 12px; margin-right: 8px; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: var(--mut); cursor: pointer; }
 .gb-tools { margin: 8px 0 0; }
-
-.gb-keyin { font: inherit; font-size: .92rem; padding: 4px 10px; margin-right: 8px; border: 1px solid var(--line); border-radius: 999px; }
-
+.gb-keyin { font: inherit; font-size: 16px; padding: 6px 10px; margin-right: 8px; border: 1px solid var(--line); border-radius: 999px; }
 /* Compact entry form (Jason, 2026-11-10): labels only, tight rows. */
 .gb-form p { margin: .45rem 0; }
 .gb-form input[type="text"], .gb-form input[type="email"], .gb-form textarea { padding: .45rem .6rem; }
-
 /* One-row short fields + tighter guestbook card (Jason, 2026-11-11). */
-.gb-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: .6rem; }
-.gb-row p { margin: 0; }
-@media (max-width: 560px) { .gb-row { grid-template-columns: 1fr; } .gb-row p { margin: .35rem 0; } }
+.gb-row { display: grid; grid-template-columns: 1fr; gap: .6rem; }
+.gb-row p { margin: .35rem 0; }
+@media (min-width: 561px) { .gb-row { grid-template-columns: 1fr 1fr 1fr; } .gb-row p { margin: 0; } }
 .card:has(> #gb) { padding: 16px 18px; }
-
 /* Threaded replies + opening-posts rail (2026-11-11). */
 .gb-replying { font-weight: 600; margin: .2rem 0 .45rem; }
-.gb-layout { display: grid; grid-template-columns: minmax(0, 1fr) 250px; gap: 1.2rem; align-items: start; }
-.gb-side { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; position: sticky; top: 12px; }
+.gb-layout { display: grid; grid-template-columns: 1fr; gap: 1.2rem; align-items: start; }
+.gb-side { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; position: static; order: -1; }
 .gb-sidetag { font-weight: 600; margin: 0 0 4px; }
-.gb-idxitem { display: block; width: 100%; text-align: left; font: inherit; background: none; border: none; border-top: 1px solid var(--line); padding: 7px 2px; cursor: pointer; color: var(--ink); }
+.gb-idxitem { display: block; width: 100%; text-align: left; font: inherit; background: none; border: none; border-top: 1px solid var(--line); padding: 9px 2px; cursor: pointer; color: var(--ink); }
 .gb-idxwho { font-weight: 600; }
 .gb-idxwhen { color: var(--mut); }
 .gb-idxex { display: block; color: var(--mut); font-size: .9rem; margin-top: 2px; }
-.gb-kids { margin-left: 14px; border-left: 2px solid var(--line); padding-left: 12px; }
+.gb-kids { margin-left: 8px; border-left: 2px solid var(--line); padding-left: 9px; }
 .gb-post { scroll-margin-top: 14px; }
 .gb-flash { background: #fdf6d8; transition: background 1.4s ease; }
-@media (max-width: 760px) {
-  .gb-layout { grid-template-columns: 1fr; }
-  .gb-side { position: static; order: -1; }
-  .gb-kids { margin-left: 8px; padding-left: 9px; }
+@media (min-width: 761px) {
+  .gb-layout { grid-template-columns: minmax(0, 1fr) 250px; }
+  .gb-side { position: sticky; top: 12px; order: 0; }
+  .gb-kids { margin-left: 14px; padding-left: 12px; }
 }
 
 /* Fishing game + games shelf (2026-11-11). */
 #fish-scene { width: 100%; height: auto; display: block; border-radius: 8px; }
 .fish-status { font-weight: 600; min-height: 1.5em; margin: 12px 0 8px; }
-.fish-btn { font: inherit; font-size: 1.15rem; font-weight: 700; padding: 12px 42px; border: 1px solid var(--acc); border-radius: 999px; color: #fff; background: var(--acc); cursor: pointer; }
+.fish-btn { font: inherit; font-size: 1.15rem; font-weight: 700; padding: 12px 34px; border: 1px solid var(--acc); border-radius: 999px; color: #fff; background: var(--acc); cursor: pointer; }
 .fish-btn:hover { background: var(--acc2); }
 .fish-result { margin-top: 14px; border-top: 1px solid var(--line); padding-top: 12px; }
 .fish-catchname { font-size: 1.35rem; font-weight: 700; margin: 0 0 2px; }
 .fish-catchline { margin: 0; color: var(--mut); }
-.fish-prize { margin-top: 16px; border: 2px solid #e8c64b; border-radius: 10px; padding: 14px 16px; display: flex; gap: 16px; align-items: center; background: #fffdf2; }
+.fish-prize { margin-top: 16px; border: 2px solid #e8c64b; border-radius: 10px; padding: 14px 16px; display: flex; flex-direction: column; text-align: center; gap: 16px; align-items: center; background: #fffdf2; }
 .fish-prizebadge { width: 120px; height: 120px; flex: none; }
 .fish-prizewin { margin: 0 0 4px; font-size: 1.08rem; }
 .fish-code { margin: 0 0 4px; font-size: 1.05rem; }
 .fish-prizehow { margin: 0; color: var(--mut); }
-.fish-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+.fish-layout { display: grid; grid-template-columns: 1fr; gap: 18px; align-items: start; }
 .fish-layout .card { margin: 0; }
-@media (max-width: 760px) { .fish-layout { grid-template-columns: 1fr; } .fish-prize { flex-direction: column; text-align: center; } }
 .fish-stats { font-weight: 600; }
 .fish-log { margin: 6px 0 0; padding-left: 20px; }
 .fish-log li { margin: 2px 0; }
-.game-card { display: flex; gap: 18px; align-items: center; }
+.game-card { display: flex; flex-direction: column; text-align: center; gap: 18px; align-items: center; }
 .game-badge { width: 110px; height: 110px; flex: none; }
-@media (max-width: 560px) { .game-card { flex-direction: column; text-align: center; } }
+@media (min-width: 561px) {
+  .game-card { flex-direction: row; text-align: left; }
+  .fish-btn { padding: 12px 42px; }
+}
+@media (min-width: 761px) {
+  .fish-prize { flex-direction: row; text-align: left; }
+  .fish-layout { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+}
 
 /* A hidden panel stays hidden, even when its class sets a display (2026-11-11). */
 [hidden] { display: none !important; }
@@ -140,7 +169,7 @@ footer { max-width:880px; margin:0 auto; padding:0 22px 34px; color:var(--mut); 
 
 /* Reversi (reversi.html) */
 .rev-levels { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
-.rev-level, .rev-new { padding: 8px 18px; border-radius: 8px; border: 1px solid var(--line); background: #fff; font: inherit; cursor: pointer; }
+.rev-level, .rev-new { padding: 9px 18px; border-radius: 8px; border: 1px solid var(--line); background: #fff; font: inherit; cursor: pointer; }
 .rev-level.rev-on { background: #1f3050; color: #fdfcf8; border-color: #1f3050; font-weight: 700; }
 .rev-score { text-align: center; font-size: 1.05rem; margin: 4px 0 12px; }
 .rev-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; vertical-align: -1px; }
@@ -162,15 +191,15 @@ footer { max-width:880px; margin:0 auto; padding:0 22px 34px; color:var(--mut); 
 .rev-standings li { padding: 6px 0; border-top: 1px solid var(--line); }
 .rev-standings li.rev-empty { list-style: none; margin-left: -22px; color: var(--mut); border-top: none; }
 .rev-biggest { margin: 10px 0 0; }
-.rev-prize { margin-top: 16px; border: 2px solid #e8c64b; border-radius: 10px; padding: 14px 16px; display: flex; gap: 16px; align-items: center; background: #fffdf2; }
+.rev-prize { margin-top: 16px; border: 2px solid #e8c64b; border-radius: 10px; padding: 14px 16px; display: flex; flex-direction: column; text-align: center; gap: 16px; align-items: center; background: #fffdf2; }
 .rev-code { font-weight: 700; letter-spacing: 1px; font-size: 1.08rem; margin: 8px 0 0; }
 .rev-fineprint { color: var(--mut); font-size: .9em; margin: 12px 0 0; }
 .rev-legal { color: var(--mut); font-size: .85em; }
-@media (max-width: 760px) { .rev-prize { flex-direction: column; text-align: center; } }
+@media (min-width: 761px) { .rev-prize { flex-direction: row; text-align: left; } }
 
 /* Share cards on the game result panels — added 2026-11-12. */
 .share-row { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
-.share-btn { font: inherit; font-size: .92rem; padding: 6px 16px; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: var(--ink, #222); cursor: pointer; }
+.share-btn { font: inherit; font-size: .92rem; padding: 8px 16px; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: var(--ink, #222); cursor: pointer; }
 .share-btn:hover { border-color: var(--acc); }
 
 /* Blanco checklist — added 2026-11-12. */
@@ -182,7 +211,7 @@ footer { max-width:880px; margin:0 auto; padding:0 22px 34px; color:var(--mut); 
 
 /* Board season toggles (This month / All time) — added 2026-11-12. */
 .board-seasons { display: flex; gap: 8px; margin: 10px 0 4px; }
-.board-season { font: inherit; font-size: .92rem; padding: 6px 14px; border: 1px solid var(--line); border-radius: 999px; background: #fff; cursor: pointer; }
+.board-season { font: inherit; font-size: .92rem; padding: 9px 14px; border: 1px solid var(--line); border-radius: 999px; background: #fff; cursor: pointer; }
 .board-season.board-season-on { background: #1f3050; color: #fdfcf8; border-color: #1f3050; font-weight: 700; }
 
 /* This week on the porch — added 2026-11-12. */
@@ -203,8 +232,8 @@ footer { max-width:880px; margin:0 auto; padding:0 22px 34px; color:var(--mut); 
 .tt-channel { color: #756d5c; margin: 0 0 8px; }
 .tt-btn { font-size: 1rem; padding: 8px 24px; }
 .tt-none { margin: 2px 0 6px; }
-.tt-stand-row { display: flex; align-items: center; gap: 10px; margin: 7px 0; }
-.tt-stand-label { flex: 0 0 34%; font-size: 0.92rem; }
+.tt-stand-row { display: flex; align-items: center; gap: 10px; margin: 7px 0; flex-wrap: wrap; }
+.tt-stand-label { flex: 1 0 100%; font-size: 0.92rem; }
 .tt-bar { flex: 1; height: 10px; background: #eee5cf; border-radius: 5px; overflow: hidden; }
 .tt-bar i { display: block; height: 100%; background: #1f3050; }
 .tt-count { flex: 0 0 76px; text-align: right; font-size: 0.9rem; color: #756d5c; }
@@ -212,3 +241,7 @@ footer { max-width:880px; margin:0 auto; padding:0 22px 34px; color:var(--mut); 
 .tt-week-row img { width: 96px; height: auto; border-radius: 6px; }
 .tt-week-day { font-weight: 700; margin: 0; }
 .tt-week-title { margin: 2px 0 0; }
+@media (min-width: 761px) {
+  .tt-stand-row { flex-wrap: nowrap; }
+  .tt-stand-label { flex: 0 0 34%; }
+}

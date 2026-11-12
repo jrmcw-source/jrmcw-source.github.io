@@ -24,3 +24,10 @@
     requestAnimationFrame(draw);
   })();
 })();
+
+// Home-screen app: register the service worker (added 2026-11-12).
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("/sw.js").catch(function () {});
+  });
+}
