@@ -194,3 +194,21 @@ footer { max-width:880px; margin:0 auto; padding:0 22px 34px; color:var(--mut); 
 .hunt-input { letter-spacing: 2px; width: 190px; }
 .hunt-tld { font-weight: 700; font-size: 1.05rem; }
 .hunt-btn { font-size: 1rem; padding: 9px 28px; }
+
+/* The Top Three — added 2026-11-12. */
+.tt-entry { margin: 0 0 22px; }
+.tt-frame { position: relative; padding-top: 56.25%; }
+.tt-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; border-radius: 8px; }
+.tt-title { font-weight: 700; margin: 8px 0 2px; }
+.tt-channel { color: #756d5c; margin: 0 0 8px; }
+.tt-btn { font-size: 1rem; padding: 8px 24px; }
+.tt-none { margin: 2px 0 6px; }
+.tt-stand-row { display: flex; align-items: center; gap: 10px; margin: 7px 0; }
+.tt-stand-label { flex: 0 0 34%; font-size: 0.92rem; }
+.tt-bar { flex: 1; height: 10px; background: #eee5cf; border-radius: 5px; overflow: hidden; }
+.tt-bar i { display: block; height: 100%; background: #1f3050; }
+.tt-count { flex: 0 0 76px; text-align: right; font-size: 0.9rem; color: #756d5c; }
+.tt-week-row { display: flex; gap: 12px; align-items: center; margin: 10px 0; }
+.tt-week-row img { width: 96px; height: auto; border-radius: 6px; }
+.tt-week-day { font-weight: 700; margin: 0; }
+.tt-week-title { margin: 2px 0 0; }
