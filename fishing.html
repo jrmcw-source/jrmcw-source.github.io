@@ -22,6 +22,15 @@
 
 <div class="card">
 <p class="tag">The River</p>
+<div id="fish-result" class="fish-result" hidden></div>
+<div id="fish-prize" class="fish-prize" hidden>
+<img id="fish-prizebadge" src="images/badge-fishing.svg" alt="The jAIou fishing badge" class="fish-prizebadge">
+<div>
+<p id="fish-prizewin" class="fish-prizewin"><strong>You landed Old Whiskers.</strong> The fishing badge is yours.</p>
+<p id="fish-code" class="fish-code">Fetching your claim code…</p>
+<p class="fish-prizehow">Take the code to the <a href="guestbook.html">guestbook</a> and put it in the Code field when you post — the badge stamps your post.</p>
+</div>
+</div>
 <svg id="fish-scene" viewBox="0 0 800 300" role="img" aria-label="A river, a dock, and a bobber">
 <rect x="0" y="0" width="800" height="120" fill="#dcebf3"/>
 <rect x="0" y="104" width="800" height="16" fill="#7fa36b"/>
@@ -42,15 +51,6 @@
 </svg>
 <p id="fish-status" class="fish-status" role="status">The water's flat. Cast when you're ready.</p>
 <p><button type="button" id="fish-btn" class="fish-btn">Cast</button></p>
-<div id="fish-result" class="fish-result" hidden></div>
-<div id="fish-prize" class="fish-prize" hidden>
-<img id="fish-prizebadge" src="images/badge-fishing.svg" alt="The jAIou fishing badge" class="fish-prizebadge">
-<div>
-<p id="fish-prizewin" class="fish-prizewin"><strong>You landed Old Whiskers.</strong> The fishing badge is yours.</p>
-<p id="fish-code" class="fish-code">Fetching your claim code…</p>
-<p class="fish-prizehow">Take the code to the <a href="guestbook.html">guestbook</a> and put it in the Code field when you post — the badge stamps your post.</p>
-</div>
-</div>
 </div>
 
 <div class="fish-layout">
@@ -76,6 +76,7 @@
 <p class="tag">Your stringer</p>
 <p class="fish-stats" id="fish-stats">No casts yet.</p>
 <ul class="fish-log" id="fish-log"></ul>
+<ul class="fish-log" id="fish-totals"></ul>
 </div>
 <div class="card">
 <p class="tag">Blanco checklist</p>
@@ -109,6 +110,6 @@
 <footer><p>jason@jaiou.com · Lafayette, Louisiana · <a href="index.html">jaiou.com</a></p><p class="topwrap"><a class="totop" href="#top">↑ Top</a></p></footer>
 <script src="binary.js"></script>
 <script src="share-card.js" defer></script>
-<script src="fishing.js?v=20261112-3" defer></script>
+<script src="fishing.js?v=20261112-5" defer></script>
 </body>
 </html>

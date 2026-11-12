@@ -57,15 +57,19 @@
   function seedSpecies(s) {
     var map = {};
     (s.log || []).forEach(function (c) {
-      var rec = map[c.name] || { n: 0, best: null };
+      var rec = map[c.name] || { n: 0, best: null, tot: 0 };
       rec.n += 1;
-      if (c.weight && (!rec.best || c.weight > rec.best)) rec.best = c.weight;
+      if (c.weight) {
+        if (!rec.best || c.weight > rec.best) rec.best = c.weight;
+        rec.tot = (rec.tot || 0) + c.weight;
+      }
       map[c.name] = rec;
     });
     if (s.best) {
-      var rec = map[s.best.name] || { n: 0, best: null };
+      var rec = map[s.best.name] || { n: 0, best: null, tot: 0 };
       if (!rec.best || s.best.weight > rec.best) rec.best = s.best.weight;
       if (!rec.n) rec.n = 1;
+      if (!rec.tot) rec.tot = s.best.weight;
       map[s.best.name] = rec;
     }
     return map;
@@ -118,16 +122,81 @@
       li.textContent = c.weight ? c.name + " — " + c.weight.toFixed(1) + " lb" : c.name;
       logEl.appendChild(li);
     });
+    paintTotals(s);
+  }
+
+  // The stringer by species: how many of each, and their weight all
+  // together — "Bluegill — 10.9 lbs (5 total)" (Jason, 2026-11-12).
+  var totalsEl = document.getElementById("fish-totals");
+  function paintTotals(s) {
+    if (!totalsEl) return;
+    totalsEl.textContent = "";
+    if (!s.species) return;
+    var seeded = null, dirty = false;
+    RIVER.forEach(function (f) {
+      var rec = s.species[f.name];
+      if (!rec || !rec.n) return;
+      if (rec.tot == null) {
+        if (!seeded) seeded = seedSpecies(s);
+        rec.tot = seeded[f.name] ? seeded[f.name].tot || 0 : 0;
+        dirty = true;
+      }
+      var li = document.createElement("li");
+      li.textContent = rec.tot
+        ? f.name + " — " + rec.tot.toFixed(1) + " lbs (" + rec.n + " total)"
+        : f.name + " (" + rec.n + " total)";
+      totalsEl.appendChild(li);
+    });
+    if (dirty) save(s);
   }
 
   function reset(delay) {
     later(function () {
       state = "idle";
       btn.textContent = "Cast";
+      btn.disabled = false;
       bobber.setAttribute("opacity", "0");
       line.setAttribute("opacity", "0");
       splash.setAttribute("opacity", "0");
     }, delay || 0);
+  }
+
+  // The caught fish, drawn: one silhouette, colored by species, sized
+  // by the weight on the line. The gar and the eel run long and thin.
+  var FISH_ART = {
+    "Bluegill": ["#88a04f", 1, 1],
+    "Largemouth bass": ["#5d8a4e", 1, 1],
+    "Guadalupe bass": ["#6f9455", 1, 1],
+    "Rio Grande cichlid": ["#7fb3b0", 1, 1],
+    "Channel catfish": ["#7d8aa0", 1, 1],
+    "Flathead catfish": ["#8a7a5a", 1, 1],
+    "Old Whiskers": ["#6e5a3e", 1, 1],
+    "Gar": ["#9aa06a", 1.35, 0.8],
+    "Mud eel": ["#5a6e46", 1.3, 0.5]
+  };
+  function fishFigure(name, weight) {
+    var spec = FISH_ART[name];
+    if (!spec) return null;
+    var w = weight ? Math.round(90 + Math.sqrt(weight) * 36) : 130;
+    if (w > 340) w = 340;
+    var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("viewBox", "0 0 300 120");
+    svg.setAttribute("width", String(w));
+    svg.setAttribute("role", "img");
+    svg.setAttribute("aria-label", name);
+    svg.style.maxWidth = "92%";
+    svg.style.height = "auto";
+    svg.innerHTML =
+      '<g transform="translate(150,60) scale(' + spec[1] + "," + spec[2] + ') translate(-150,-60)">' +
+      '<path d="M18,60 C60,18 150,10 208,42 L262,14 C250,40 250,80 262,106 L208,78 C150,110 60,102 18,60 Z" fill="' + spec[0] + '"/>' +
+      '<path d="M95,22 C112,8 142,6 158,17 C140,18 118,20 95,22 Z" fill="rgba(0,0,0,0.22)"/>' +
+      '<path d="M122,28 C136,44 136,76 122,94 C130,76 130,45 122,28 Z" fill="rgba(0,0,0,0.16)"/>' +
+      '<circle cx="52" cy="52" r="7" fill="#fdfcf8"/><circle cx="52" cy="52" r="3.6" fill="#1c1c1c"/>' +
+      "</g>";
+    var wrap = document.createElement("div");
+    wrap.style.textAlign = "center";
+    wrap.appendChild(svg);
+    return wrap;
   }
 
   function cast() {
@@ -260,27 +329,47 @@
       reset(1200);
       return;
     }
-    // state === "bite"
+    if (state !== "bite") return; // fighting — the click waits its turn
+    // The fight (Jason, 2026-11-12): what was caught stays under the
+    // water a while, and the wait runs on the size of the fish — a
+    // bluegill shows himself quick, a big flathead takes his time.
     clearTimers();
-    splash.setAttribute("opacity", "0");
     var f = pickCatch();
+    var weight = f.min === null ? null : f.min + Math.random() * (f.max - f.min);
+    state = "fighting";
+    btn.disabled = true;
+    btn.textContent = "Reeling…";
+    status.textContent = "On the line — hold on…";
+    splash.setAttribute("opacity", "1");
+    placeBobber(10);
+    var delay = weight ? Math.min(500 + weight * 70, 5000) : 600;
+    later(function () { revealCatch(f, weight); }, delay);
+  }
+
+  function revealCatch(f, weight) {
+    splash.setAttribute("opacity", "0");
+    btn.disabled = false;
     var s = store();
     s.caught = (s.caught || 0) + 1;
-    var weight = f.min === null ? null : f.min + Math.random() * (f.max - f.min);
     s.log = s.log || [];
     s.log.unshift({ name: f.name, weight: weight });
     s.log = s.log.slice(0, 8);
     if (weight && (!s.best || weight > s.best.weight)) s.best = { name: f.name, weight: weight };
     if (!s.species) s.species = seedSpecies(s);
-    var rec = s.species[f.name] || { n: 0, best: null };
+    var rec = s.species[f.name] || { n: 0, best: null, tot: 0 };
     rec.n += 1;
-    if (weight && (!rec.best || weight > rec.best)) rec.best = weight;
+    if (weight) {
+      if (!rec.best || weight > rec.best) rec.best = weight;
+      rec.tot = (rec.tot || 0) + weight;
+    }
     s.species[f.name] = rec;
     save(s);
     paintStringer();
     if (weight) submitCatch(f.name, weight);
     result.hidden = false;
     result.textContent = "";
+    var fig = fishFigure(f.name, weight);
+    if (fig) result.appendChild(fig);
     var head = document.createElement("p");
     head.className = "fish-catchname";
     head.textContent = weight ? f.name + " — " + weight.toFixed(1) + " lb" : f.name;
@@ -300,6 +389,9 @@
     status.textContent = "Got him.";
     if (f.name === "Old Whiskers") showPrize(fishTier(s.species["Old Whiskers"].n));
     reset(400);
+    // The catch shows above the river — bring it into view so nobody
+    // has to scroll to see what they caught.
+    if (result.scrollIntoView) result.scrollIntoView({ block: "nearest", behavior: "smooth" });
   }
 
   // The leaderboard: everybody fishes in their own browser, all at once if
