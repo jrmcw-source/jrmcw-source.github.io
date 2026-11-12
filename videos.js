@@ -126,7 +126,7 @@
     if (s.badge) {
       txt.appendChild(el("p", "board-note", "You're " + (s.tier === "porchg" ? "wearing the gold badge" : "a " + TIER_NAME[s.tier]) + "."));
     } else {
-      txt.appendChild(el("p", "board-note", "Keep showing up — the porch takes care of its regulars. One missed day a month doesn't break it."));
+      txt.appendChild(el("p", "board-note", "You're on the ladder — it starts at Porch Regular and climbs from there. Nobody's told where the rungs are. One missed day a month doesn't break a streak."));
     }
     head.appendChild(txt);
     streakBox.appendChild(head);
