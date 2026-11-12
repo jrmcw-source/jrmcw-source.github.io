@@ -175,11 +175,16 @@
     "Gar": ["#9aa06a", 1.35, 0.8],
     "Mud eel": ["#5a6e46", 1.3, 0.5]
   };
-  function fishFigure(name, weight) {
+  function fishFigure(name, weight, compact) {
     var spec = FISH_ART[name];
     if (!spec) return null;
-    var w = weight ? Math.round(90 + Math.sqrt(weight) * 36) : 130;
-    if (w > 340) w = 340;
+    // Compact: the picture rides beside the words, small enough that
+    // the Cast button stays on the screen (Jason, 2026-11-12).
+    var w = compact
+      ? Math.round(84 + Math.sqrt(weight || 1) * 8)
+      : (weight ? Math.round(90 + Math.sqrt(weight) * 36) : 130);
+    if (compact && w > 120) w = 120;
+    if (!compact && w > 340) w = 340;
     var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.setAttribute("viewBox", "0 0 300 120");
     svg.setAttribute("width", String(w));
@@ -397,16 +402,25 @@
     if (weight) submitCatch(f.name, weight);
     result.hidden = false;
     result.textContent = "";
-    var fig = fishFigure(f.name, weight);
-    if (fig) result.appendChild(fig);
+    // Picture and words share one row, squeezed into the same card, so
+    // a catch doesn't push the Cast button off the screen.
+    var row = document.createElement("div");
+    row.style.display = "flex";
+    row.style.alignItems = "center";
+    row.style.gap = "12px";
+    var fig = fishFigure(f.name, weight, true);
+    if (fig) { fig.style.flex = "none"; row.appendChild(fig); }
+    var txt = document.createElement("div");
     var head = document.createElement("p");
     head.className = "fish-catchname";
     head.textContent = weight ? f.name + " — " + weight.toFixed(1) + " lb" : f.name;
-    result.appendChild(head);
+    txt.appendChild(head);
     var sub = document.createElement("p");
     sub.className = "fish-catchline";
     sub.textContent = f.line;
-    result.appendChild(sub);
+    txt.appendChild(sub);
+    row.appendChild(txt);
+    result.appendChild(row);
     if (window.JaiouShare) {
       var cardTitle = weight ? f.name + " — " + weight.toFixed(1) + " lb" : f.name;
       window.JaiouShare.attach(result, {
