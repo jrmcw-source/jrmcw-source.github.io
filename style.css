@@ -167,3 +167,8 @@ footer { max-width:880px; margin:0 auto; padding:0 22px 34px; color:var(--mut); 
 .rev-fineprint { color: var(--mut); font-size: .9em; margin: 12px 0 0; }
 .rev-legal { color: var(--mut); font-size: .85em; }
 @media (max-width: 760px) { .rev-prize { flex-direction: column; text-align: center; } }
+
+/* Share cards on the game result panels — added 2026-11-12. */
+.share-row { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+.share-btn { font: inherit; font-size: .92rem; padding: 6px 16px; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: var(--ink, #222); cursor: pointer; }
+.share-btn:hover { border-color: var(--acc); }

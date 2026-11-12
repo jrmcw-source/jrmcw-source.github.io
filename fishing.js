@@ -180,6 +180,14 @@
     sub.className = "fish-catchline";
     sub.textContent = f.line;
     result.appendChild(sub);
+    if (window.JaiouShare) {
+      var cardTitle = weight ? f.name + " — " + weight.toFixed(1) + " lb" : f.name;
+      window.JaiouShare.attach(result, {
+        text: "🎣 " + cardTitle + "\n" + f.line + "\nBlanco River fishing at jAIou — jaiou.com/fishing.html",
+        filename: "jaiou-fishing.png",
+        image: { bg: "#14342a", accent: "#e8c268", title: cardTitle, lines: [f.line, "Blanco River · jaiou.com"] },
+      });
+    }
     status.textContent = "Got him.";
     if (f.name === "Old Whiskers") showPrize();
     reset(400);

@@ -156,6 +156,18 @@
       resultNoteEl.textContent = "No points, but the game goes on the board under " + name + ".";
     }
     resultEl.hidden = false;
+    if (window.JaiouShare) {
+      var lvl = LEVEL_NAMES[level];
+      var cardTitle, cardText;
+      if (outcome === "win") { cardTitle = "I win at Reversi — " + mine + "–" + theirs; cardText = "♟ " + cardTitle + " against " + lvl + ".\nJason's table at jAIou — jaiou.com/reversi.html"; }
+      else if (outcome === "draw") { cardTitle = "A draw at Reversi — 32–32"; cardText = "♟ " + cardTitle + " against " + lvl + ".\nJason's table at jAIou — jaiou.com/reversi.html"; }
+      else { cardTitle = "Reversi — the computer took it " + theirs + "–" + mine; cardText = "♟ " + cardTitle + " at " + lvl + ". Rematch pending.\nJason's table at jAIou — jaiou.com/reversi.html"; }
+      window.JaiouShare.attach(resultEl, {
+        text: cardText,
+        filename: "jaiou-reversi.png",
+        image: { bg: "#17301f", accent: "#e8c268", title: cardTitle, lines: ["against " + lvl + " · Jason's table", "jaiou.com"] },
+      });
+    }
     setStatus("Game over.");
     render();
     if (name && !reported) {
