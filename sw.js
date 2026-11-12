@@ -1,8 +1,9 @@
 // jaiou.com service worker — added 2026-11-12 with the home-screen kit.
-// Pages: network first, so nobody is ever served a stale page; the cache is
-// only a fallback for a dead connection. Static files: cache first with a
-// background refresh. Versioned URLs (?v=) keep refreshed files distinct.
-var CACHE = "jaiou-v1";
+// Pages, scripts and styles: network first, so nobody is ever served a
+// stale build; the cache is only a fallback for a dead connection.
+// Images: cache first with a background refresh. Versioned URLs (?v=)
+// keep refreshed files distinct. CACHE bumps clear older caches.
+var CACHE = "jaiou-v2";
 
 self.addEventListener("install", function (e) {
   self.skipWaiting();
@@ -21,7 +22,8 @@ self.addEventListener("fetch", function (e) {
   if (req.method !== "GET") return;
   var url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
-  if (req.mode === "navigate") {
+  var freshFirst = req.mode === "navigate" || /\.(?:js|css)$/.test(url.pathname);
+  if (freshFirst) {
     e.respondWith(
       fetch(req).then(function (res) {
         var copy = res.clone();
