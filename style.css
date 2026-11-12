@@ -172,3 +172,10 @@ footer { max-width:880px; margin:0 auto; padding:0 22px 34px; color:var(--mut); 
 .share-row { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
 .share-btn { font: inherit; font-size: .92rem; padding: 6px 16px; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: var(--ink, #222); cursor: pointer; }
 .share-btn:hover { border-color: var(--acc); }
+
+/* Blanco checklist — added 2026-11-12. */
+.check-count { font-weight: 600; margin: 4px 0 6px; }
+.check-row { display: flex; justify-content: space-between; gap: 12px; padding: 5px 0; border-top: 1px solid var(--line); }
+.check-row.check-miss { color: var(--mut); }
+.check-mark { color: var(--acc); font-weight: 700; }
+.check-miss .check-mark { color: var(--mut); }

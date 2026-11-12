@@ -52,8 +52,60 @@
     line.setAttribute("y2", bobY - 14 + (dip || 0));
   }
 
+  // The checklist keeps every species ever met in this browser. Older
+  // stringers predate it, so it seeds itself from the log and the best fish.
+  function seedSpecies(s) {
+    var map = {};
+    (s.log || []).forEach(function (c) {
+      var rec = map[c.name] || { n: 0, best: null };
+      rec.n += 1;
+      if (c.weight && (!rec.best || c.weight > rec.best)) rec.best = c.weight;
+      map[c.name] = rec;
+    });
+    if (s.best) {
+      var rec = map[s.best.name] || { n: 0, best: null };
+      if (!rec.best || s.best.weight > rec.best) rec.best = s.best.weight;
+      if (!rec.n) rec.n = 1;
+      map[s.best.name] = rec;
+    }
+    return map;
+  }
+
+  var checkEl = document.getElementById("fish-checklist");
+  var checkCountEl = document.getElementById("fish-checkcount");
+  function paintChecklist(s) {
+    if (!checkEl) return;
+    if (!s.species) { s.species = seedSpecies(s); save(s); }
+    var met = 0;
+    checkEl.textContent = "";
+    RIVER.forEach(function (f) {
+      var rec = s.species[f.name];
+      var row = document.createElement("div");
+      row.className = "check-row" + (rec ? "" : " check-miss");
+      var left = document.createElement("span");
+      var mark = document.createElement("span");
+      mark.className = "check-mark";
+      mark.textContent = rec ? "✓ " : "· ";
+      left.appendChild(mark);
+      left.appendChild(document.createTextNode(f.name));
+      var right = document.createElement("span");
+      right.className = "lb-right";
+      if (rec) {
+        met += 1;
+        right.textContent = (rec.n > 1 ? "×" + rec.n + " " : "") + (rec.best ? "best " + rec.best.toFixed(1) + " lb" : "met");
+      } else {
+        right.textContent = "not yet";
+      }
+      row.appendChild(left);
+      row.appendChild(right);
+      checkEl.appendChild(row);
+    });
+    if (checkCountEl) checkCountEl.textContent = met + " of " + RIVER.length + " caught so far";
+  }
+
   function paintStringer() {
     var s = store();
+    paintChecklist(s);
     if (!statsEl || !logEl) return;
     if (!s.casts) { statsEl.textContent = "No casts yet."; logEl.textContent = ""; return; }
     statsEl.textContent = s.casts + (s.casts === 1 ? " cast" : " casts") + " · " +
@@ -167,6 +219,11 @@
     s.log.unshift({ name: f.name, weight: weight });
     s.log = s.log.slice(0, 8);
     if (weight && (!s.best || weight > s.best.weight)) s.best = { name: f.name, weight: weight };
+    if (!s.species) s.species = seedSpecies(s);
+    var rec = s.species[f.name] || { n: 0, best: null };
+    rec.n += 1;
+    if (weight && (!rec.best || weight > rec.best)) rec.best = weight;
+    s.species[f.name] = rec;
     save(s);
     paintStringer();
     if (weight) submitCatch(f.name, weight);
