@@ -200,12 +200,23 @@
     return wrap;
   }
 
+  // How big a share of the biggest fish this one is — every wait in
+  // the game leans on it (Jason, 2026-11-12): the smallest fish comes
+  // on a quick bite, a quick sink, and a quick catch; the largest on
+  // a long bite, a long sink, and the long reveal. Randomness is
+  // stirred into the bite, so the timing hints and never tells.
+  function sizeCurve(weight) { return Math.sqrt(Math.min(weight, 72) / 72); }
+
   function cast() {
     clearTimers();
-    pending = null;
     result.hidden = true;
     state = "waiting";
     var s = store(); s.casts = (s.casts || 0) + 1; save(s); paintStringer();
+    // What's coming is picked when the cast lands — the waits ahead
+    // run on its size, so it has to be known from here.
+    var f0 = pickCatch();
+    var w0 = f0.min === null ? null : f0.min + Math.random() * (f0.max - f0.min);
+    pending = { f: f0, weight: w0 };
     bobX = 380 + Math.random() * 340;
     bobY = 190 + Math.random() * 60;
     placeBobber(0);
@@ -225,22 +236,24 @@
         }, t);
       })(1200 + i * 1500 + Math.random() * 900);
     }
-    // When the bobber sinks runs random — three to nine seconds a cast
-    // (Jason, 2026-11-12). How long it stays under runs on the size of
-    // what's on the line: half a second for the little ones, up to five
-    // for the biggest — bigger fish on the longer sinks. So the catch
-    // is picked here, when the bobber goes down, not at the strike.
+    // The bite: three to nine seconds a cast, leaning long for big
+    // fish and short for little ones, with up to a second and a half
+    // of plain chance stirred in — you never know how long to let it
+    // sink, because it's random. How long the bobber then STAYS under
+    // runs on size alone: half a second to five, bigger fish on the
+    // longer sinks.
+    var biteDelay = pending.weight
+      ? Math.min(3000 + sizeCurve(pending.weight) * 4500 + Math.random() * 1500, 9000)
+      : 3000 + Math.random() * 6000;
     later(function () {
       if (state !== "waiting") return;
       state = "bite";
       placeBobber(13);
       splash.setAttribute("opacity", "1");
       status.textContent = "He's on — strike!";
-      var f = pickCatch();
-      var weight = f.min === null ? null : f.min + Math.random() * (f.max - f.min);
-      pending = { f: f, weight: weight };
+      var weight = pending ? pending.weight : null;
       var sunk = weight
-        ? 500 + Math.sqrt(Math.min(weight, 72) / 72) * 4500
+        ? 500 + sizeCurve(weight) * 4500
         : 500 + Math.random() * 700;
       later(function () {
         if (state !== "bite") return;
@@ -248,7 +261,7 @@
         status.textContent = "It got away.";
         reset(1400);
       }, sunk);
-    }, 3000 + Math.random() * 6000);
+    }, biteDelay);
   }
 
   function pickCatch() {
@@ -358,7 +371,7 @@
     status.textContent = "On the line — hold on…";
     splash.setAttribute("opacity", "1");
     placeBobber(10);
-    var delay = weight ? Math.min(500 + weight * 70, 5000) : 600;
+    var delay = weight ? 500 + sizeCurve(weight) * 4500 : 600;
     later(function () { revealCatch(f, weight); }, delay);
   }
 
