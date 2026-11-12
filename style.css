@@ -179,3 +179,8 @@ footer { max-width:880px; margin:0 auto; padding:0 22px 34px; color:var(--mut); 
 .check-row.check-miss { color: var(--mut); }
 .check-mark { color: var(--acc); font-weight: 700; }
 .check-miss .check-mark { color: var(--mut); }
+
+/* Board season toggles (This month / All time) — added 2026-11-12. */
+.board-seasons { display: flex; gap: 8px; margin: 10px 0 4px; }
+.board-season { font: inherit; font-size: .92rem; padding: 6px 14px; border: 1px solid var(--line); border-radius: 999px; background: #fff; cursor: pointer; }
+.board-season.board-season-on { background: #1f3050; color: #fdfcf8; border-color: #1f3050; font-weight: 700; }

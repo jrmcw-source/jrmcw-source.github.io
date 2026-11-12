@@ -192,13 +192,19 @@
     return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
   }
 
+  var boardSeason = "now"; // "now" | "all"
+  function seasonParam() {
+    if (boardSeason === "all") return "";
+    return "?season=" + new Date().toLocaleDateString("en-CA", { timeZone: "America/Chicago" }).slice(0, 7);
+  }
+
   function loadBoard() {
-    fetch(API + "/reversi/board").then(function (r) { return r.json(); }).then(function (data) {
+    fetch(API + "/reversi/board" + seasonParam()).then(function (r) { return r.json(); }).then(function (data) {
       standingsEl.textContent = "";
       if (!data.standings || data.standings.length === 0) {
         var li = document.createElement("li");
         li.className = "rev-empty";
-        li.textContent = "No games on the board yet. Yours could be the first.";
+        li.textContent = boardSeason === "now" ? "No games this month yet. Yours could be the first." : "No games on the board yet. Yours could be the first.";
         standingsEl.appendChild(li);
       } else {
         data.standings.forEach(function (row) {
@@ -256,6 +262,17 @@
   }
 
   document.getElementById("rev-new").addEventListener("click", newGame);
+
+  var seasonNowBtn = document.getElementById("rev-season-now");
+  var seasonAllBtn = document.getElementById("rev-season-all");
+  function paintSeason() {
+    seasonNowBtn.classList.toggle("board-season-on", boardSeason === "now");
+    seasonAllBtn.classList.toggle("board-season-on", boardSeason === "all");
+  }
+  if (seasonNowBtn && seasonAllBtn) {
+    seasonNowBtn.addEventListener("click", function () { if (boardSeason !== "now") { boardSeason = "now"; paintSeason(); loadBoard(); } });
+    seasonAllBtn.addEventListener("click", function () { if (boardSeason !== "all") { boardSeason = "all"; paintSeason(); loadBoard(); } });
+  }
 
   var levelBtns = document.querySelectorAll(".rev-level");
   function paintLevels() {

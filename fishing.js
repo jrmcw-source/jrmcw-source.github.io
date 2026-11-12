@@ -287,7 +287,7 @@
     if (!top.length) {
       var p = document.createElement("p");
       p.className = "gb-empty";
-      p.textContent = "No fish on the board yet. Yours could be the first.";
+      p.textContent = boardSeason === "now" ? "No fish this month yet. Yours could be the first." : "No fish on the board yet. Yours could be the first.";
       boardBox.appendChild(p);
     } else {
       top.forEach(function (c, i) {
@@ -310,12 +310,27 @@
     }
   }
 
+  var boardSeason = "now"; // "now" | "all"
   function loadBoard() {
     if (!boardBox) return;
-    fetch(API + "/board")
+    var url = API + "/board";
+    if (boardSeason === "now") url += "?season=" + new Date().toLocaleDateString("en-CA", { timeZone: "America/Chicago" }).slice(0, 7);
+    fetch(url)
       .then(function (r) { return r.json(); })
       .then(renderBoard)
       .catch(function () { /* the fishing still works without the board */ });
+  }
+
+  var seasonNowBtn = document.getElementById("fish-season-now");
+  var seasonAllBtn = document.getElementById("fish-season-all");
+  function paintSeason() {
+    if (!seasonNowBtn || !seasonAllBtn) return;
+    seasonNowBtn.classList.toggle("board-season-on", boardSeason === "now");
+    seasonAllBtn.classList.toggle("board-season-on", boardSeason === "all");
+  }
+  if (seasonNowBtn && seasonAllBtn) {
+    seasonNowBtn.addEventListener("click", function () { if (boardSeason !== "now") { boardSeason = "now"; paintSeason(); loadBoard(); } });
+    seasonAllBtn.addEventListener("click", function () { if (boardSeason !== "all") { boardSeason = "all"; paintSeason(); loadBoard(); } });
   }
 
   btn.addEventListener("click", strike);
