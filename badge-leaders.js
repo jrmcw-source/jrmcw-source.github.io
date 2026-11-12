@@ -25,6 +25,7 @@
     porch1: ["images/badge-porch1.svg", "Porch Regular badge, one bar"],
     porch2: ["images/badge-porch2.svg", "Porch Regular badge, two bars"],
     porch3: ["images/badge-porch3.svg", "Porch Regular badge, three bars"],
+    porch4: ["images/badge-porch4.svg", "Porch Regular badge, four bars"],
     porchg: ["images/badge-porchg.svg", "Porch Regular gold badge"],
     music: ["images/badge-music.svg", "Music badge"],
   };

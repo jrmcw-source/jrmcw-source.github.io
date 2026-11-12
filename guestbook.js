@@ -32,6 +32,7 @@
     porch1: ["images/badge-porch1.svg", "Porch Regular — one bar", "Porch Regular badge, one bar"],
     porch2: ["images/badge-porch2.svg", "Porch Regular — two bars", "Porch Regular badge, two bars"],
     porch3: ["images/badge-porch3.svg", "Porch Regular — three bars", "Porch Regular badge, three bars"],
+    porch4: ["images/badge-porch4.svg", "Porch Regular — four bars", "Porch Regular badge, four bars"],
     porchg: ["images/badge-porchg.svg", "Porch Regular — the gold badge", "Porch Regular gold badge"]
   };
 
