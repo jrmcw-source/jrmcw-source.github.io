@@ -159,6 +159,14 @@ footer { max-width:880px; margin:0 auto; padding:0 16px 30px; color:var(--mut); 
 .bb-row:first-child { border-top: none; padding-top: 2px; }
 .bb-img { width: 38px; height: 38px; flex: none; }
 
+/* Central badge leaders (Games page) — added 2026-11-12. */
+.bl-row { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line); }
+.bl-row:first-child { border-top: none; padding-top: 2px; }
+.bl-rank { font-weight: 700; color: var(--acc2); min-width: 1.4em; text-align: center; }
+.bl-who { flex: 1; min-width: 0; }
+.bl-icons { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
+.bl-icons img { width: 30px; height: 30px; }
+
 /* Fishing leaderboard (2026-11-11). */
 .lb-row { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-top: 1px solid var(--line); }
 .lb-right { color: var(--mut); font-size: .92em; text-align: right; }

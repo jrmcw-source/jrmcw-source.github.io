@@ -10,7 +10,19 @@
   var meta = document.getElementById("hunt-meta");
   var prize = document.getElementById("hunt-prize");
   var codeEl = document.getElementById("hunt-code");
+  var prizeImg = document.getElementById("hunt-prizebadge");
+  var prizeWin = document.getElementById("hunt-prizewin");
   if (!btn || !candInput) return;
+
+  // The Hunt ladder: repeat finds change the badge. The server counts the
+  // finds and names the rung; the page just wears what it is handed.
+  var HUNT_TIERS = {
+    hunt: { art: "images/badge-hunt.svg", win: "<strong>You found one.</strong>" },
+    hunt1: { art: "images/badge-hunt1.svg", win: "<strong>You found another.</strong> The badge grew a bar." },
+    hunt2: { art: "images/badge-hunt2.svg", win: "<strong>A third find.</strong> Two bars on the badge now." },
+    hunt3: { art: "images/badge-hunt3.svg", win: "<strong>A fourth find.</strong> Three bars on the badge now." },
+    huntg: { art: "images/badge-huntg.svg", win: "<strong>A fifth find.</strong> The badge turned gold." },
+  };
 
   function store() {
     try { return JSON.parse(localStorage.getItem("jaiou_hunt") || "{}"); } catch (e) { return {}; }
@@ -84,9 +96,16 @@
         if (typeof d.tries_left === "number") markHunted();
         if (d.found) {
           var s = store();
-          s.finds = (s.finds || 0) + 1;
+          s.finds = typeof d.finds === "number" ? d.finds : (s.finds || 0) + 1;
           save(s);
           status.textContent = "You found one.";
+          var tier = HUNT_TIERS[d.badge_kind] || HUNT_TIERS.hunt;
+          if (prizeImg) prizeImg.src = tier.art;
+          if (prizeWin) {
+            prizeWin.innerHTML = d.badge_kind === "huntg" && d.finds > 5
+              ? "<strong>Another find.</strong> The gold badge stands."
+              : tier.win;
+          }
           prize.hidden = false;
           codeEl.textContent = d.code ? "Your claim code: " + d.code : "The badge is yours — the claim code didn't come through just now. The find is written down all the same.";
           if (window.JaiouShare) {

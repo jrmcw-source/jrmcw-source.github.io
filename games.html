@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="style.css?v=20261112-3">
+<link rel="stylesheet" href="style.css?v=20261112-4">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.webmanifest">
@@ -19,6 +19,12 @@
 </header>
 <main>
 <p class="big">The games here give out badges. Win one, and you get a claim code — take it to the guestbook, put it in the Code field when you post, and the badge stamps your post for everybody to see.</p>
+
+<div class="card">
+<p class="tag">Badge leaders</p>
+<div id="game-badge-leaders"><p class="gb-empty">Loading the badge leaders…</p></div>
+<p class="board-note">Every badge here was won in the games and claimed in the guestbook. The count is different badges — repeat stamps don't pile up.</p>
+</div>
 
 <div class="card game-card">
 <img src="images/badge-fishing.svg" alt="The jAIou fishing badge" class="game-badge">
@@ -64,5 +70,6 @@
 </main>
 <footer><p>jason@jaiou.com · Lafayette, Louisiana · <a href="index.html">jaiou.com</a></p><p class="topwrap"><a class="totop" href="#top">↑ Top</a></p></footer>
 <script src="binary.js"></script>
+<script src="badge-leaders.js?v=20261112-1" defer></script>
 </body>
 </html>
