@@ -44,9 +44,9 @@
 <p><button type="button" id="fish-btn" class="fish-btn">Cast</button></p>
 <div id="fish-result" class="fish-result" hidden></div>
 <div id="fish-prize" class="fish-prize" hidden>
-<img src="images/badge-fishing.svg" alt="The jAIou fishing badge" class="fish-prizebadge">
+<img id="fish-prizebadge" src="images/badge-fishing.svg" alt="The jAIou fishing badge" class="fish-prizebadge">
 <div>
-<p class="fish-prizewin"><strong>You landed Old Whiskers.</strong> The fishing badge is yours.</p>
+<p id="fish-prizewin" class="fish-prizewin"><strong>You landed Old Whiskers.</strong> The fishing badge is yours.</p>
 <p id="fish-code" class="fish-code">Fetching your claim code…</p>
 <p class="fish-prizehow">Take the code to the <a href="guestbook.html">guestbook</a> and put it in the Code field when you post — the badge stamps your post.</p>
 </div>
@@ -81,6 +81,15 @@
 <p class="tag">Blanco checklist</p>
 <p class="check-count" id="fish-checkcount"></p>
 <div id="fish-checklist"></div>
+<div id="fish-gold" class="fish-prize" hidden>
+<img src="images/badge-fishingg.svg" alt="The gold jAIou fishing badge" class="fish-prizebadge">
+<div>
+<p class="fish-prizewin"><strong>The whole river.</strong> Everything in the Blanco, caught by you.</p>
+<p id="fish-gold-code" class="fish-code">Fetching your claim code…</p>
+<p class="fish-prizehow">Take the code to the <a href="guestbook.html">guestbook</a> and put it in the Code field when you post — the badge stamps your post.</p>
+</div>
+</div>
+<p class="board-note">Badges climb on this river too. Nobody's told how.</p>
 </div>
 </div>
 
@@ -100,6 +109,6 @@
 <footer><p>jason@jaiou.com · Lafayette, Louisiana · <a href="index.html">jaiou.com</a></p><p class="topwrap"><a class="totop" href="#top">↑ Top</a></p></footer>
 <script src="binary.js"></script>
 <script src="share-card.js" defer></script>
-<script src="fishing.js?v=20261112-2" defer></script>
+<script src="fishing.js?v=20261112-3" defer></script>
 </body>
 </html>

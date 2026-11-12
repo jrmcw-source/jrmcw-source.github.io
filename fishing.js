@@ -101,6 +101,7 @@
       checkEl.appendChild(row);
     });
     if (checkCountEl) checkCountEl.textContent = met + " of " + RIVER.length + " caught so far";
+    paintGold(s);
   }
 
   function paintStringer() {
@@ -177,26 +178,77 @@
     return RIVER[0];
   }
 
-  function showPrize() {
+  // The fishing ladder: repeat Whiskers grows bars on the badge, and the
+  // whole river caught earns the gold. The rungs are a mystery — the page
+  // never says where the next one stands; the badge simply changes.
+  var FISH_TIERS = {
+    fishing: { art: "images/badge-fishing.svg", win: "<strong>You landed Old Whiskers.</strong> The fishing badge is yours." },
+    fishing1: { art: "images/badge-fishing1.svg", win: "<strong>Old Whiskers, again.</strong> The badge grew a bar." },
+    fishing2: { art: "images/badge-fishing2.svg", win: "<strong>A third Whiskers.</strong> Two bars on the badge now." },
+    fishing3: { art: "images/badge-fishing3.svg", win: "<strong>Five Whiskers.</strong> Three bars. The river knows your name." },
+  };
+  function fishTier(w) {
+    return w >= 5 ? "fishing3" : w >= 3 ? "fishing2" : w >= 2 ? "fishing1" : w >= 1 ? "fishing" : null;
+  }
+  function codesOf(s) {
+    if (!s.codes) { s.codes = {}; if (s.code) s.codes.fishing = s.code; }
+    return s.codes;
+  }
+  function setCodeLine(elm, code) {
+    elm.innerHTML = "";
+    elm.appendChild(document.createTextNode("Your badge claim code: "));
+    var strong = document.createElement("strong");
+    strong.textContent = code;
+    elm.appendChild(strong);
+  }
+  var prizeImg = document.getElementById("fish-prizebadge");
+  var prizeWin = document.getElementById("fish-prizewin");
+  function showPrize(kind) {
+    var t = FISH_TIERS[kind];
+    if (!t) return;
     prize.hidden = false;
+    if (prizeImg) prizeImg.src = t.art;
+    if (prizeWin) prizeWin.innerHTML = t.win;
     var s = store();
-    if (s.code) {
-      codeLine.innerHTML = "";
-      codeLine.appendChild(document.createTextNode("Your badge claim code: "));
-      var strong = document.createElement("strong");
-      strong.textContent = s.code;
-      codeLine.appendChild(strong);
-      return;
-    }
-    fetch(API + "/badge/issue?kind=fishing")
+    var codes = codesOf(s);
+    save(s);
+    if (codes[kind]) { setCodeLine(codeLine, codes[kind]); return; }
+    codeLine.textContent = "Fetching your claim code…";
+    fetch(API + "/badge/issue?kind=" + kind)
       .then(function (r) { return r.json(); })
       .then(function (d) {
         if (!d.code) throw new Error("no code");
-        var st = store(); st.code = d.code; save(st);
-        showPrize();
+        var st = store(); codesOf(st)[kind] = d.code; save(st);
+        showPrize(kind);
       })
       .catch(function () {
         codeLine.textContent = "The badge is yours — the claim code didn't come through just now. Cast again later and it will be waiting.";
+      });
+  }
+
+  var goldEl = document.getElementById("fish-gold");
+  var goldCode = document.getElementById("fish-gold-code");
+  var goldFetching = false;
+  function paintGold(s) {
+    if (!goldEl) return;
+    var met = 0;
+    RIVER.forEach(function (f) { if (s.species && s.species[f.name]) met += 1; });
+    if (met < RIVER.length) { goldEl.hidden = true; return; }
+    goldEl.hidden = false;
+    var codes = codesOf(s);
+    if (codes.fishingg) { setCodeLine(goldCode, codes.fishingg); return; }
+    if (goldFetching) return;
+    goldFetching = true;
+    fetch(API + "/badge/issue?kind=fishingg")
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d.code) throw new Error("no code");
+        var st = store(); codesOf(st).fishingg = d.code; save(st);
+        setCodeLine(goldCode, d.code);
+      })
+      .catch(function () {
+        goldFetching = false;
+        goldCode.textContent = "The gold badge is yours — the claim code didn't come through just now. It will be waiting here.";
       });
   }
 
@@ -246,7 +298,7 @@
       });
     }
     status.textContent = "Got him.";
-    if (f.name === "Old Whiskers") showPrize();
+    if (f.name === "Old Whiskers") showPrize(fishTier(s.species["Old Whiskers"].n));
     reset(400);
   }
 
