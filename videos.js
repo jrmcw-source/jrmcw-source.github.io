@@ -11,6 +11,8 @@
   var standBox = document.getElementById("tt-standings");
   var weekCard = document.getElementById("tt-week-card");
   var weekBox = document.getElementById("tt-week");
+  var streakCard = document.getElementById("tt-streak-card");
+  var streakBox = document.getElementById("tt-streak");
   if (!todayBox) return;
 
   function el(tag, cls, text) {
@@ -86,6 +88,78 @@
   var data = null;
   var voting = false;
 
+  // The streak is the visitor's prize: days of ballots in a row, and days
+  // in a row of calling the winner. A week of ballots earns Porch Regular.
+  var claim = { code: null, busy: false };
+  function renderStreak() {
+    var s = data && data.streak;
+    if (!s || !s.ballots) { streakCard.hidden = true; return; }
+    streakCard.hidden = false;
+    streakBox.textContent = "";
+    var head = el("div", "bb-row");
+    var img = document.createElement("img");
+    img.className = "bb-img";
+    img.src = "images/badge-porch.svg";
+    img.alt = "";
+    head.appendChild(img);
+    var txt = el("div");
+    var line = s.ballots + (s.ballots === 1 ? " day" : " days") + " of ballots";
+    if (s.called > 0) line += " · called it " + s.called + " running";
+    txt.appendChild(el("p", "fish-stats", line));
+    if (s.badge) {
+      txt.appendChild(el("p", "board-note", "That's a week — you're a Porch Regular. The badge below is yours."));
+    } else {
+      var left = 7 - s.ballots;
+      txt.appendChild(el("p", "board-note", left + (left === 1 ? " more day" : " more days") + " to Porch Regular. One missed day a month doesn't break it."));
+    }
+    head.appendChild(txt);
+    streakBox.appendChild(head);
+    if (s.badge) streakBox.appendChild(claimPanel());
+  }
+  function claimPanel() {
+    var panel = el("div", "fish-prize");
+    var img = document.createElement("img");
+    img.className = "fish-prizebadge";
+    img.src = "images/badge-porch.svg";
+    img.alt = "The Porch Regular badge";
+    panel.appendChild(img);
+    var txt = el("div");
+    if (claim.code) {
+      txt.appendChild(el("p", "fish-prizewin", "Porch Regular — a week of ballots, kept."));
+      txt.appendChild(el("p", "fish-code", "Your code: " + claim.code));
+      txt.appendChild(el("p", "fish-prizehow", "Put it in the Code box when you sign the Guestbook and the badge rides along with your post."));
+      var sh = el("div");
+      txt.appendChild(sh);
+      if (window.JaiouShare) {
+        window.JaiouShare.attach(sh, {
+          text: "Porch Regular at jAIou — a week of Top Three ballots, kept.\nThe Top Three, every day: jaiou.com/videos.html",
+          filename: "jaiou-porch-regular.png",
+          image: { bg: "#1f3050", accent: "#c9d2da", title: "Porch Regular", lines: ["A week of Top Three ballots, kept", "jAIou · jaiou.com/videos.html"] },
+        });
+      }
+    } else {
+      txt.appendChild(el("p", "fish-prizewin", "Porch Regular — a week of ballots, kept."));
+      var b = el("button", "gb-submit", "Claim your badge");
+      b.type = "button";
+      b.addEventListener("click", claimBadge);
+      txt.appendChild(b);
+      txt.appendChild(el("p", "fish-prizehow", "One code, good for the Guestbook — the badge rides along with your post there."));
+    }
+    panel.appendChild(txt);
+    return panel;
+  }
+  function claimBadge() {
+    if (claim.busy || claim.code) return;
+    claim.busy = true;
+    fetch(API + "/badge/issue?kind=porch")
+      .then(function (r) { return r.json().then(function (d) { return { status: r.status, data: d }; }); })
+      .then(function (res) {
+        if (res.status === 200 && res.data.code) claim.code = res.data.code;
+      })
+      .catch(function () {})
+      .finally(function () { claim.busy = false; renderStreak(); });
+  }
+
   function renderStandings() {
     var st = data.standings;
     if (!st) { standBox.hidden = true; return; }
@@ -155,7 +229,9 @@
           data.voted = true;
           data.my_pick = res.data.my_pick;
           data.standings = res.data.standings;
+          if (res.data.streak) data.streak = res.data.streak;
           renderToday();
+          renderStreak();
         } else {
           status.textContent = (res.data && res.data.error) || "That ballot didn't land. Try again.";
         }
@@ -170,6 +246,7 @@
       data = d;
       renderYesterday(d.yesterday);
       renderToday();
+      renderStreak();
       renderWeek(d.week);
     })
     .catch(function () { status.textContent = "The roundup didn't answer just now. Give it a minute."; });
