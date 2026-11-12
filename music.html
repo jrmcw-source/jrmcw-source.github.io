@@ -21,6 +21,13 @@
 <p class="big">I played trumpet in the Lafayette High School Symphonic Band. What I have of the band on record is three discs — two concerts from my school years, and the night we played the Midwest Clinic in Chicago. All of it streams below.</p>
 
 <div class="card">
+<p class="tag">Listening</p>
+<p>There's a badge in listening to this band. Play a track and it's yours — and the badge climbs the more of the forty you've heard. Where the rungs are is the music's business.</p>
+<p id="music-count" class="board-note">You haven't heard any of the forty yet.</p>
+<div id="music-claim"></div>
+</div>
+
+<div class="card">
 <p class="tag">Disc 3 — The Midwest Clinic · Chicago</p>
 <h2 style="margin-top:0">Midwest Clinic — December 22, 1988</h2>
 <p>The Midwest Clinic was the biggest stage a high school band could stand on, and in December 1988 the band stood on it. Eleven pieces, played under our director, Patrick W. Finkbeiner, with guest conductors Ray C. Cramer and Jack W. White. The disc came back to me years later with no titles on it — just Track 1 through Track 12. The names below were rebuilt from the printed program and my own ear, nearly forty years on. The Bach plays in two parts because that is how the disc cut it.</p>
@@ -82,5 +89,120 @@
 </main>
 <footer><p>jason@jaiou.com · Lafayette, Louisiana · <a href="index.html">jaiou.com</a></p><p class="topwrap"><a class="totop" href="#top">↑ Top</a></p></footer>
 <script src="binary.js"></script>
+<script src="share-card.js"></script>
+<script>
+// Listening earns the music badge (Jason, 2026-11-12): the badge at the
+// first track played, a bar at 3 heard, two at 7, three at 15, and the
+// gold at all 40. Distinct tracks count, kept in this browser; claim
+// codes are minted per tier the way the fishing codes are.
+(function () {
+  var API = "https://jaiou-guestbook.jrmcw.workers.dev";
+  var KEY = "jaiou_music";
+  var TIERS = [[40, "musicg"], [15, "music3"], [7, "music2"], [3, "music1"], [1, "music"]];
+  var ART = {
+    music: "images/badge-music.svg", music1: "images/badge-music1.svg",
+    music2: "images/badge-music2.svg", music3: "images/badge-music3.svg", musicg: "images/badge-musicg.svg"
+  };
+  var LINES = {
+    music: "First track down — the music badge is yours.",
+    music1: "Three tracks heard — the badge wears a bar now.",
+    music2: "Seven tracks heard — two bars on the badge.",
+    music3: "Fifteen tracks heard — three bars on the badge.",
+    musicg: "The whole band, all forty tracks. The gold badge is yours."
+  };
+  var countEl = document.getElementById("music-count");
+  var claimEl = document.getElementById("music-claim");
+  if (!countEl || !claimEl) return;
+
+  var s = { heard: {}, codes: {} };
+  try {
+    var raw = JSON.parse(localStorage.getItem(KEY) || "null");
+    if (raw) { s.heard = raw.heard || {}; s.codes = raw.codes || {}; }
+  } catch (e) { /* fresh */ }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) { /* private mode */ } }
+  function heardCount() { return Object.keys(s.heard).length; }
+  function tierFor(n) {
+    for (var i = 0; i < TIERS.length; i++) if (n >= TIERS[i][0]) return TIERS[i][1];
+    return null;
+  }
+  function paintCount() {
+    var n = heardCount();
+    countEl.textContent = n === 0
+      ? "You haven't heard any of the forty yet."
+      : "You've heard " + n + " of the 40 tracks.";
+  }
+  function renderClaim(kind, code) {
+    claimEl.textContent = "";
+    var panel = document.createElement("div");
+    panel.className = "catch-panel";
+    var img = document.createElement("img");
+    img.className = "badge-img";
+    img.src = ART[kind];
+    img.alt = "The jAIou music badge";
+    panel.appendChild(img);
+    var line = document.createElement("p");
+    line.className = "catch-line";
+    line.textContent = LINES[kind];
+    panel.appendChild(line);
+    if (code) {
+      var cp = document.createElement("p");
+      cp.appendChild(document.createTextNode("Your badge code: "));
+      var cs = document.createElement("span");
+      cs.className = "catch-code";
+      cs.textContent = code;
+      cp.appendChild(cs);
+      panel.appendChild(cp);
+      var how = document.createElement("p");
+      how.appendChild(document.createTextNode("Take the code to the "));
+      var a = document.createElement("a");
+      a.href = "guestbook.html";
+      a.textContent = "guestbook";
+      how.appendChild(a);
+      how.appendChild(document.createTextNode(" and put it in the Code field when you post — the badge stamps your post."));
+      panel.appendChild(how);
+    } else {
+      var wait = document.createElement("p");
+      wait.textContent = "Getting your badge code…";
+      panel.appendChild(wait);
+    }
+    var shareBox = document.createElement("div");
+    panel.appendChild(shareBox);
+    claimEl.appendChild(panel);
+    if (window.JaiouShare) {
+      window.JaiouShare.attach(shareBox, {
+        text: LINES[kind] + " The Lafayette High School Symphonic Band, streaming at jaiou.com",
+        filename: "jaiou-music-badge.png",
+        image: { bg: "#1f3050", accent: "#e8c64b", title: "jAIou", lines: ["The music badge", "Lafayette High School Symphonic Band"] }
+      });
+    }
+  }
+  function ensureClaim() {
+    var kind = tierFor(heardCount());
+    if (!kind) { claimEl.textContent = ""; return; }
+    if (s.codes[kind]) { renderClaim(kind, s.codes[kind]); return; }
+    renderClaim(kind, null);
+    fetch(API + "/badge/issue?kind=" + kind)
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d && d.code) { s.codes[kind] = d.code; save(); renderClaim(kind, d.code); }
+      })
+      .catch(function () { /* the panel stands; the code can mint on a later visit */ });
+  }
+
+  var audios = document.querySelectorAll("audio");
+  Array.prototype.forEach.call(audios, function (a) {
+    a.addEventListener("play", function () {
+      var src = a.getAttribute("src");
+      if (!src || s.heard[src]) return;
+      s.heard[src] = 1;
+      save();
+      paintCount();
+      ensureClaim();
+    });
+  });
+  paintCount();
+  ensureClaim();
+})();
+</script>
 </body>
 </html>

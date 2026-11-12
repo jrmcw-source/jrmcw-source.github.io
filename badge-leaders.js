@@ -28,8 +28,22 @@
     porch4: ["images/badge-porch4.svg", "Porch Regular badge, four bars"],
     porchg: ["images/badge-porchg.svg", "Porch Regular gold badge"],
     music: ["images/badge-music.svg", "Music badge"],
+    music1: ["images/badge-music1.svg", "Music badge, one bar"],
+    music2: ["images/badge-music2.svg", "Music badge, two bars"],
+    music3: ["images/badge-music3.svg", "Music badge, three bars"],
+    musicg: ["images/badge-musicg.svg", "Music gold badge"],
   };
   var KIND_ORDER = Object.keys(BADGE_ART);
+
+  // Every badge on this page is a door to the game that gives it out.
+  var BADGE_LINK = {
+    mcwoogle: "https://mcwoogle.com/",
+    fishing: "fishing.html", fishing1: "fishing.html", fishing2: "fishing.html", fishing3: "fishing.html", fishingg: "fishing.html",
+    hunt: "hunt.html", hunt1: "hunt.html", hunt2: "hunt.html", hunt3: "hunt.html", huntg: "hunt.html",
+    othello: "reversi.html",
+    porch: "videos.html", porch1: "videos.html", porch2: "videos.html", porch3: "videos.html", porch4: "videos.html", porchg: "videos.html",
+    music: "music.html", music1: "music.html", music2: "music.html", music3: "music.html", musicg: "music.html",
+  };
 
   function render(rows) {
     var people = {};
@@ -80,7 +94,12 @@
         img.src = BADGE_ART[kind][0];
         img.alt = "";
         img.title = BADGE_ART[kind][1];
-        icons.appendChild(img);
+        var a = document.createElement("a");
+        a.href = BADGE_LINK[kind];
+        a.title = BADGE_ART[kind][1];
+        if (kind === "mcwoogle") { a.target = "_blank"; a.rel = "noopener"; }
+        a.appendChild(img);
+        icons.appendChild(a);
       });
       div.appendChild(icons);
       box.appendChild(div);
