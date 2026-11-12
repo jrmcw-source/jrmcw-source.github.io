@@ -39,7 +39,8 @@
     try { localStorage.setItem("jaiou_fishing", JSON.stringify(s)); } catch (e) {}
   }
 
-  var state = "idle"; // idle | waiting | bite
+  var state = "idle"; // idle | waiting | bite | fighting
+  var pending = null; // what's on the line, picked when the bobber sinks
   var timers = [];
   var bobX = 480, bobY = 208;
   function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
@@ -201,6 +202,7 @@
 
   function cast() {
     clearTimers();
+    pending = null;
     result.hidden = true;
     state = "waiting";
     var s = store(); s.casts = (s.casts || 0) + 1; save(s); paintStringer();
@@ -223,20 +225,29 @@
         }, t);
       })(1200 + i * 1500 + Math.random() * 900);
     }
-    // The sink timer runs random, both ends of it (Jason, 2026-11-12):
-    // three to nine seconds until the bobber goes under, and three to
-    // nine seconds that it stays under before the fish is gone.
+    // When the bobber sinks runs random — three to nine seconds a cast
+    // (Jason, 2026-11-12). How long it stays under runs on the size of
+    // what's on the line: half a second for the little ones, up to five
+    // for the biggest — bigger fish on the longer sinks. So the catch
+    // is picked here, when the bobber goes down, not at the strike.
     later(function () {
       if (state !== "waiting") return;
       state = "bite";
       placeBobber(13);
       splash.setAttribute("opacity", "1");
       status.textContent = "He's on — strike!";
+      var f = pickCatch();
+      var weight = f.min === null ? null : f.min + Math.random() * (f.max - f.min);
+      pending = { f: f, weight: weight };
+      var sunk = weight
+        ? 500 + Math.sqrt(Math.min(weight, 72) / 72) * 4500
+        : 500 + Math.random() * 700;
       later(function () {
         if (state !== "bite") return;
+        pending = null;
         status.textContent = "It got away.";
         reset(1400);
-      }, 3000 + Math.random() * 6000);
+      }, sunk);
     }, 3000 + Math.random() * 6000);
   }
 
@@ -337,8 +348,10 @@
     // water a while, and the wait runs on the size of the fish — a
     // bluegill shows himself quick, a big flathead takes his time.
     clearTimers();
-    var f = pickCatch();
-    var weight = f.min === null ? null : f.min + Math.random() * (f.max - f.min);
+    var onLine = pending || { f: pickCatch(), weight: null };
+    pending = null;
+    var f = onLine.f;
+    var weight = onLine.weight;
     state = "fighting";
     btn.disabled = true;
     btn.textContent = "Reeling…";
