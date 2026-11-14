@@ -1,8 +1,8 @@
 // hunt.js — the Domain Hunt at jaiou.com.
 // Five tries a day, counted on the server. A find is told to its finder
-// and nobody else: the name shows on the winner's own screen (the win
-// panel and his own tries list, both in his browser only) and is never
-// published — not on the board, not anywhere public.
+// on his own screen (the win panel and his own tries list, both in his
+// browser only) and is never published — not on the board, not anywhere
+// public. The owner's email copy of every find stands, as it always has.
 (function () {
   var API = "https://jaiou-guestbook.jrmcw.workers.dev";
   var nameInput = document.getElementById("hunt-name");
@@ -140,8 +140,8 @@
               ? "<strong>Another find.</strong> The gold badge stands."
               : tier.win;
             // The finder is told his own name — on his screen only. It is
-            // never published or shown to anyone else.
-            prizeWin.innerHTML += " The name is <strong>" + candidate + ".com</strong> — yours to know, and nobody else is told.";
+            // never published and never shows on the board.
+            prizeWin.innerHTML += " The name is <strong>" + candidate + ".com</strong> — yours to know. It isn't published, and it never shows on the board.";
           }
           prize.hidden = false;
           codeEl.textContent = d.code ? "Your claim code: " + d.code : "The badge is yours — the claim code didn't come through just now. The find is written down all the same.";
