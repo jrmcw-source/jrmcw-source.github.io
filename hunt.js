@@ -16,6 +16,7 @@
   var prizeWin = document.getElementById("hunt-prizewin");
   var triesWrap = document.getElementById("hunt-tries-wrap");
   var triesList = document.getElementById("hunt-tries");
+  var gbLink = document.getElementById("hunt-gblink");
   if (!btn || !candInput) return;
 
   // The Hunt ladder: repeat finds change the badge. The server counts the
@@ -144,6 +145,8 @@
           }
           prize.hidden = false;
           codeEl.textContent = d.code ? "Your claim code: " + d.code : "The badge is yours — the claim code didn't come through just now. The find is written down all the same.";
+          // The guestbook link carries the code, so the Code field fills itself in.
+          if (d.code && gbLink) gbLink.href = "guestbook.html?code=" + encodeURIComponent(d.code);
           if (window.JaiouShare) {
             window.JaiouShare.attach(prize, {
               text: "🔎 I found one on the Domain Hunt at jAIou. The name stays secret.\njaiou.com/hunt.html",

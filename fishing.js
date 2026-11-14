@@ -295,12 +295,16 @@
     if (!s.codes) { s.codes = {}; if (s.code) s.codes.fishing = s.code; }
     return s.codes;
   }
-  function setCodeLine(elm, code) {
+  var gbLink = document.getElementById("fish-gblink");
+  var goldGbLink = document.getElementById("fish-gold-gblink");
+  function setCodeLine(elm, code, link) {
     elm.innerHTML = "";
     elm.appendChild(document.createTextNode("Your badge claim code: "));
     var strong = document.createElement("strong");
     strong.textContent = code;
     elm.appendChild(strong);
+    // The guestbook link carries the code, so the Code field fills itself in.
+    if (link && code) link.href = "guestbook.html?code=" + encodeURIComponent(code);
   }
   var prizeImg = document.getElementById("fish-prizebadge");
   var prizeWin = document.getElementById("fish-prizewin");
@@ -313,7 +317,7 @@
     var s = store();
     var codes = codesOf(s);
     save(s);
-    if (codes[kind]) { setCodeLine(codeLine, codes[kind]); return; }
+    if (codes[kind]) { setCodeLine(codeLine, codes[kind], gbLink); return; }
     codeLine.textContent = "Fetching your claim code…";
     fetch(API + "/badge/issue?kind=" + kind)
       .then(function (r) { return r.json(); })
@@ -337,7 +341,7 @@
     if (met < RIVER.length) { goldEl.hidden = true; return; }
     goldEl.hidden = false;
     var codes = codesOf(s);
-    if (codes.fishingg) { setCodeLine(goldCode, codes.fishingg); return; }
+    if (codes.fishingg) { setCodeLine(goldCode, codes.fishingg, goldGbLink); return; }
     if (goldFetching) return;
     goldFetching = true;
     fetch(API + "/badge/issue?kind=fishingg")
@@ -345,7 +349,7 @@
       .then(function (d) {
         if (!d.code) throw new Error("no code");
         var st = store(); codesOf(st).fishingg = d.code; save(st);
-        setCodeLine(goldCode, d.code);
+        setCodeLine(goldCode, d.code, goldGbLink);
       })
       .catch(function () {
         goldFetching = false;

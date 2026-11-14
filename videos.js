@@ -150,7 +150,14 @@
     txt.appendChild(el("p", "fish-prizewin", TIER_NAME[s.tier] + " — ballots kept, days running."));
     if (claim.code) {
       txt.appendChild(el("p", "fish-code", "Your code: " + claim.code));
-      txt.appendChild(el("p", "fish-prizehow", "Put it in the Code box when you sign the Guestbook and the badge rides along with your post."));
+      var how = el("p", "fish-prizehow");
+      how.appendChild(document.createTextNode("Take this code to the "));
+      var ga = document.createElement("a");
+      ga.href = "guestbook.html?code=" + encodeURIComponent(claim.code);
+      ga.textContent = "Guestbook";
+      how.appendChild(ga);
+      how.appendChild(document.createTextNode(" and put it in the Code field when you post — the badge rides along with your post."));
+      txt.appendChild(how);
       var sh = el("div");
       txt.appendChild(sh);
       if (window.JaiouShare) {

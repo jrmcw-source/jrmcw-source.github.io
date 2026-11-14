@@ -21,6 +21,7 @@
   var resultLineEl = document.getElementById("rev-resultline");
   var resultNoteEl = document.getElementById("rev-resultnote");
   var codeEl = document.getElementById("rev-code");
+  var gbLink = document.getElementById("rev-gblink");
 
   var store = {};
   try { store = JSON.parse(localStorage.getItem("jaiou_reversi") || "{}"); } catch (e) { store = {}; }
@@ -238,6 +239,8 @@
         codeEl.hidden = false;
         if (data.code) {
           codeEl.textContent = "Your claim code: " + data.code;
+          // The guestbook link carries the code, so the Code field fills itself in.
+          if (gbLink) gbLink.href = "guestbook.html?code=" + encodeURIComponent(data.code);
         } else {
           codeEl.textContent = data.error || "No code just now — the lead may have changed. The board above is the word.";
         }

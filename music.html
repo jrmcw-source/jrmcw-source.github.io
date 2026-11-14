@@ -155,7 +155,7 @@
       var how = document.createElement("p");
       how.appendChild(document.createTextNode("Take the code to the "));
       var a = document.createElement("a");
-      a.href = "guestbook.html";
+      a.href = "guestbook.html?code=" + encodeURIComponent(code);
       a.textContent = "guestbook";
       how.appendChild(a);
       how.appendChild(document.createTextNode(" and put it in the Code field when you post — the badge stamps your post."));
