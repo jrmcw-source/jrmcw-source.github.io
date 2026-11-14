@@ -1,6 +1,8 @@
 // hunt.js — the Domain Hunt at jaiou.com.
-// Five tries a day, counted on the server. The page never displays a found
-// name — it only ever hears "found" — and neither does anything else.
+// Five tries a day, counted on the server. A find is told to its finder
+// and nobody else: the name shows on the winner's own screen (the win
+// panel and his own tries list, both in his browser only) and is never
+// published — not on the board, not anywhere public.
 (function () {
   var API = "https://jaiou-guestbook.jrmcw.workers.dev";
   var nameInput = document.getElementById("hunt-name");
@@ -12,6 +14,8 @@
   var codeEl = document.getElementById("hunt-code");
   var prizeImg = document.getElementById("hunt-prizebadge");
   var prizeWin = document.getElementById("hunt-prizewin");
+  var triesWrap = document.getElementById("hunt-tries-wrap");
+  var triesList = document.getElementById("hunt-tries");
   if (!btn || !candInput) return;
 
   // The Hunt ladder: repeat finds change the badge. The server counts the
@@ -58,6 +62,34 @@
     meta.textContent = parts.join(" · ");
   }
 
+  // The tries list: every candidate the registry answered about today, in
+  // the order tried, kept in this browser only — the hunter's own record.
+  // A find shows its name here; this list never leaves his browser.
+  function todaysTries() {
+    var s = store();
+    if (s.triesDay !== chicagoDay(0) || !Array.isArray(s.tries)) return [];
+    return s.tries;
+  }
+  function paintTries() {
+    if (!triesWrap || !triesList) return;
+    var tries = todaysTries();
+    triesList.textContent = "";
+    tries.forEach(function (t) {
+      var li = document.createElement("li");
+      li.textContent = t.f ? t.c + ".com — found it" : t.c + ".com";
+      triesList.appendChild(li);
+    });
+    triesWrap.hidden = tries.length === 0;
+  }
+  function recordTry(candidate, found) {
+    var s = store();
+    var today = chicagoDay(0);
+    if (s.triesDay !== today || !Array.isArray(s.tries)) { s.tries = []; s.triesDay = today; }
+    s.tries.push({ c: candidate, f: found ? 1 : 0 });
+    save(s);
+    paintTries();
+  }
+
   function markHunted() {
     var s = store();
     var today = chicagoDay(0);
@@ -95,6 +127,7 @@
         }
         if (typeof d.tries_left === "number") markHunted();
         if (d.found) {
+          recordTry(candidate, true);
           var s = store();
           s.finds = typeof d.finds === "number" ? d.finds : (s.finds || 0) + 1;
           save(s);
@@ -105,6 +138,9 @@
             prizeWin.innerHTML = d.badge_kind === "huntg" && d.finds > 5
               ? "<strong>Another find.</strong> The gold badge stands."
               : tier.win;
+            // The finder is told his own name — on his screen only. It is
+            // never published or shown to anyone else.
+            prizeWin.innerHTML += " The name is <strong>" + candidate + ".com</strong> — yours to know, and nobody else is told.";
           }
           prize.hidden = false;
           codeEl.textContent = d.code ? "Your claim code: " + d.code : "The badge is yours — the claim code didn't come through just now. The find is written down all the same.";
@@ -116,9 +152,11 @@
             });
           }
         } else if (res.status === 200) {
+          recordTry(candidate, false);
           status.textContent = "Taken.";
           prize.hidden = true;
         } else {
+          recordTry(candidate, false);
           status.textContent = d.error || "The registry did not answer. That try does not count.";
         }
         paintMeta(typeof d.tries_left === "number" ? d.tries_left : undefined);
@@ -135,4 +173,5 @@
 
   btn.addEventListener("click", tryOne);
   paintMeta();
+  paintTries();
 })();
