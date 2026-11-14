@@ -63,9 +63,9 @@
     meta.textContent = parts.join(" · ");
   }
 
-  // The tries list: every candidate the registry answered about today, in
-  // the order tried, kept in this browser only — the hunter's own record.
-  // A find shows its name here; this list never leaves his browser.
+  // The tries list: the hunter's guesses today, in the order made, kept in
+  // this browser only — his own record. A find shows its name here; this
+  // list never leaves his browser.
   function todaysTries() {
     var s = store();
     if (s.triesDay !== chicagoDay(0) || !Array.isArray(s.tries)) return [];
@@ -122,6 +122,14 @@
         var d = res.data || {};
         candInput.value = "";
         if (res.status === 429) {
+          // The day is spent on the server, but this browser's list can be
+          // short of five — the count runs per address, so a try made from
+          // another device spends from the same five and never lands here.
+          // The guess just made is the one the hunter is missing: write it
+          // down, plain. A refused try was never checked at the registry,
+          // so it cannot be a find. Once the list holds five, later clicks
+          // add nothing.
+          if (todaysTries().length < 5) recordTry(candidate, false);
           status.textContent = "That's the five for today. The hunt opens again tomorrow.";
           paintMeta(0);
           return;
@@ -159,7 +167,10 @@
           status.textContent = "Taken.";
           prize.hidden = true;
         } else {
-          recordTry(candidate, false);
+          // No verdict came back — the registry did not answer, or the
+          // try never arrived whole — and the server did not count it.
+          // It does not go on the list either: the list holds tries that
+          // counted.
           status.textContent = d.error || "The registry did not answer. That try does not count.";
         }
         paintMeta(typeof d.tries_left === "number" ? d.tries_left : undefined);
