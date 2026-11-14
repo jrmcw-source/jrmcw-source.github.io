@@ -452,6 +452,16 @@
     weekEl.textContent = WEEK_QUESTIONS[((weeks % n) + n) % n];
   }
 
+  // A claim code can arrive in the link (the McWoogle prize panel sends
+  // winners here as guestbook.html?code=JAI-XXXX-XXXX): fill the Code
+  // field for them, so all they have to do is write their post.
+  try {
+    var arrivedCode = new URLSearchParams(window.location.search).get("code");
+    if (arrivedCode) {
+      form.elements["code"].value = arrivedCode.trim().slice(0, 20).toUpperCase();
+    }
+  } catch (e) {}
+
   paintOwnerTools();
   load();
 })();
