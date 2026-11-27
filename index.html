@@ -23,9 +23,10 @@
 <div class="hsearch"><form action="https://mcwoogle.com/" method="get" target="_blank" rel="noopener" role="search"><input type="text" name="q" placeholder="Search" aria-label="Search"><button type="submit">Search</button></form></div>
 <nav class="menu"><div class="in"><a href="index.html" class="here">Home</a><a href="bio.html">Bio</a><a href="contact.html">Contact Info</a><a href="links.html">Links</a><a href="pics.html">Pics</a><a href="music.html">Music</a><a href="guestbook.html">Guestbook</a><a href="junk.html">Junk Drawer</a><a href="games.html">Games</a></div></nav>
 </header>
-<video class="bannerimg" id="bannerVid" autoplay muted playsinline poster="images/linkedin-banner-1584.jpg" src="images/lab-banner-rotate.mp4" role="img" aria-label="Jason in the lab, a holographic Earth turning in its chamber beside him"></video>
+<video class="bannerimg" id="bannerVid" autoplay muted playsinline poster="images/linkedin-banner-1584.jpg" src="images/lab-banner-weather-slow.mp4" role="img" aria-label="Jason in the lab, a holographic Earth turning in its chamber beside him"></video>
+<img class="bannerimg" id="bannerStill" src="images/linkedin-banner-1584.jpg" alt="Jason in the lab, a holographic Earth turning in its chamber beside him" style="display:none">
 <script>
-(function(){var v=document.getElementById('bannerVid');var clips=['images/lab-banner-rotate.mp4','images/lab-banner-weather.mp4'];var i=0;v.addEventListener('ended',function(){i=(i+1)%clips.length;v.src=clips[i];v.play();});})();
+(function(){var v=document.getElementById('bannerVid');v.addEventListener('ended',function(){v.style.display='none';document.getElementById('bannerStill').style.display='block';});})();
 </script>
 <main>
 <img class="portrait" src="images/jason-portrait-400.jpg" alt="Portrait of Jason McWhirter">
